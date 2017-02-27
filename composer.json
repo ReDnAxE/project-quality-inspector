@@ -1,0 +1,41 @@
+{
+  "name": "carma/carma-quality-detector",
+  "description": "The CARMA quality tool.",
+  "type": "library",
+  "keywords": [
+    "carma",
+    "quality",
+    "testing"
+  ],
+  "homepage": "https://gitlab.carma.grdf.fr/carma/carma-quality-detector",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Alexandre GESLIN",
+      "email": "alexandre.geslin@external.grdf.fr"
+    }
+  ],
+  "support": {
+    "issues": "https://gitlab.carma.grdf.fr/carma/carma-quality-detector/issues"
+  },
+  "require": {
+    "php": "^5.5||^7.0",
+    "symfony/console": "^3.2",
+    "phpunit/phpunit": "^5.3"
+  },
+  "require-dev": {
+  },
+  "bin": [
+    "cqd"
+  ],
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
+  }
+}
