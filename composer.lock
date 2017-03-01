@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a652b7c36c443f60adac9bf84612a48",
+    "content-hash": "421d3ae05dbc3bdb42df4d338b04fed7",
     "packages": [
         {
             "name": "psr/log",
@@ -1554,7 +1554,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.5||^7.0"
+        "php": "^5.5"
     },
     "platform-dev": []
 }

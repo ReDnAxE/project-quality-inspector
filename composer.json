@@ -1,29 +1,38 @@
 {
-  "name": "project/project-quality-detector",
-  "description": "The Project quality tool.",
+  "name": "rednaxe/project-quality-detector",
+  "description": "Project Quality Detector provides a pqd command which checks Projects good practices thanks to customisable rules",
   "type": "library",
   "keywords": [
-    "project",
     "quality",
-    "testing"
+    "testing",
+    "symfony",
+    "angular",
+    "php",
+    "javascript",
+    "ci"
   ],
-  "homepage": "https://gitlab.project.grdf.fr/project/project-quality-detector",
+  "homepage": "https://github.com/rednaxe/project-quality-detector",
+  "license": "BSD-3-Clause",
   "authors": [
     {
       "name": "Alexandre GESLIN",
-      "email": "alexandre@gesl.in"
+      "email": "alexandre@gesl.in",
+      "role": "lead"
     }
   ],
   "support": {
-    "issues": "https://gitlab.project.grdf.fr/project/project-quality-detector/issues"
+    "issues": "https://github.com/rednaxe/project-quality-detector/issues"
   },
   "require": {
     "php": "^5.5||^7.0",
-    "symfony/console": "^3.2",
-    "symfony/yaml": "^3.2"
+    "symfony/console": "~2.7|~3.0",
+    "symfony/yaml": "~2.7|~3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.3"
+  },
+  "suggest": {
+    "ext-xdebug": "*"
   },
   "bin": [
     "pqd"

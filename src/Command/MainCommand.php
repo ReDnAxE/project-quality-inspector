@@ -26,7 +26,7 @@ class MainCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('Project quality tool')
+        $this->setName('pqd')
             ->setDescription('The Project quality tool')
             ->addArgument('applicationType', InputArgument::REQUIRED, 'The application type (symfony or angularjs, etc...)')
             ->addOption('baseDir', '-b', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
