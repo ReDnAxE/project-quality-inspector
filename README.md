@@ -1,12 +1,12 @@
 About
 -----
 
-Carma Quality Detector is a PHP script `cqd` which checks CARMA good practices
+ProjectQualityDetector is a PHP script `pqd` which checks Project good practices
 
 Requirements
 ------------
 
-PHP\_CodeSniffer requires PHP version 5.5 or greater
+ProjectQualityDetector requires PHP version 5.5 or greater
 
 Installation
 ------------

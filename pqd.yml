@@ -1,0 +1,14 @@
+symfony:
+    config-files-exists-rule:
+        - "ruleset.xml"
+        - "app/phpunit.xml"
+        - "composer.json"
+        - "phpcs.xml"
+        - "phpmd.xml"
+angularjs:
+    config-files-exists-rule:
+        - "package.json"
+        - ".eslintrc"
+all:
+    config-files-exists-rule:
+        - ".gitignore"
