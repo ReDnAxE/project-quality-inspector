@@ -31,7 +31,7 @@ class ConsoleApplication
      */
     public function run()
     {
-        $application = new Application('echo', '1.0.0');
+        $application = new Application('pqd', '1.0.0');
         $command = new MainCommand();
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);

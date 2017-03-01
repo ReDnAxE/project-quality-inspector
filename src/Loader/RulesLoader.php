@@ -27,7 +27,7 @@ class RulesLoader
     /**
      * @param string $configFile
      * @param string $applicationType
-     * @param string $basePath
+     * @param string $baseDir
      * @return bool|RuleFilterIterator
      */
     public function load($configFile, $applicationType, $baseDir)

@@ -24,9 +24,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MainCommand extends Command
 {
+    const SUCCESS_EXIT   = 0;
+    const FAILURE_EXIT   = 1;
+
     protected function configure()
     {
-        $this->setName('pqd')
+        $this->setName('run')
             ->setDescription('The Project quality tool')
             ->addArgument('applicationType', InputArgument::REQUIRED, 'The application type (symfony or angularjs, etc...)')
             ->addOption('baseDir', '-b', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
@@ -41,8 +44,8 @@ class MainCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $applicationType = $input->getArgument('applicationType');
-        $baseDir = $input->getOption('baseDir') ? : getcwd(); //TODO: check
-        $configFile = $input->getOption('configFile') ? $input->getOption('configFile') : $this->getConfigFile($baseDir); //TODO: check
+        $baseDir = $input->getOption('baseDir') ? $input->getOption('baseDir') : getcwd();
+        $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile(); //TODO: check
 
         $rulesLoader = new RulesLoader();
         $rules = $rulesLoader->load($configFile, $applicationType, $baseDir);
@@ -56,18 +59,17 @@ class MainCommand extends Command
             }
         }
 
-        return 0;
+        return $this::SUCCESS_EXIT;
     }
 
     /**
-     * @param $baseDir
      * @return string
      */
-    protected function getConfigFile($baseDir)
+    protected function getConfigFile()
     {
         $configsToSearch = [
-            $baseDir . '/pqd.yml',
-            __DIR__ . '/pqd.yml'
+            getcwd() . '/pqd.yml',
+            __DIR__ . '/../../pqd.yml'
         ];
 
         return (file_exists($configsToSearch[0])) ? $configsToSearch[0] : $configsToSearch[1];
