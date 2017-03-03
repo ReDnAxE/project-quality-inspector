@@ -27,7 +27,7 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.0.3
+composer require --dev rednaxe/project-quality-inspector ^1.0.4
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
@@ -49,7 +49,7 @@ For Symfony 2.*, you will have to add ``run`` key like this :
 $ ./bin/pqi run mycustomconfig
 ```
 
-You can use ``-c`` or ``--configFile``, and  option to respectively change the configuration file, and the inspection base directory :
+You can use ``-c`` or ``--configFile``, and ``-b`` or ``--baseDir`` options to respectively change the configuration file, and the inspection base directory :
 ```bash
 $ ./bin/pqi mycustomconfig -c config/pqi.yml -b Back/src
 ```
