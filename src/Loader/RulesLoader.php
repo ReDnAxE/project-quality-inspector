@@ -34,7 +34,7 @@ class RulesLoader
      */
     public function load($configFile, $applicationType, $baseDir)
     {
-        if (!file_exists($configFile.'tes')) {
+        if (!file_exists($configFile)) {
             throw new \InvalidArgumentException(sprintf('config file "%s" not found.', $configFile));
         }
 
