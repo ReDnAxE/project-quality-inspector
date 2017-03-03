@@ -3,6 +3,7 @@ symfony:
         - "ruleset.xml"
         - "app/phpunit.xml"
         - "!web/app_*.php"
+        - "web/app.php"
         - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
         - "composer.json"
         - "phpcs.xml"
