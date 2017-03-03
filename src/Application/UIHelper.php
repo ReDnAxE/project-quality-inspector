@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Application;
+namespace ProjectQualityInspector\Application;
 
-use ProjectQualityDetector\Exception\RuleViolationException;
-use ProjectQualityDetector\Rule\RuleInterface;
+use ProjectQualityInspector\Exception\RuleViolationException;
+use ProjectQualityInspector\Rule\RuleInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UIHelper
@@ -23,7 +23,7 @@ class UIHelper
      */
     public static function displayStartingBlock(OutputInterface $output, $configFile, $version)
     {
-        $output->writeln(sprintf('<question>Starting Project Quality Detector v%s with config file "%s"</question>', $version, $configFile));
+        $output->writeln(sprintf('<question>Starting Project Quality Inspector v%s with config file "%s"</question>', $version, $configFile));
     }
 
     /**

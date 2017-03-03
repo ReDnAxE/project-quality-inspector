@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Application;
+namespace ProjectQualityInspector\Application;
 
 use Symfony\Component\Console\Application;
-use ProjectQualityDetector\Command\MainCommand;
+use ProjectQualityInspector\Command\MainCommand;
 
 /**
  * A Quality runner for the Command Line Interface (CLI)
@@ -31,7 +31,7 @@ class ConsoleApplication
      */
     public function run()
     {
-        $application = new Application('pqd', '1.0.0');
+        $application = new Application('pqi', '1.0.1');
         $command = new MainCommand();
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);

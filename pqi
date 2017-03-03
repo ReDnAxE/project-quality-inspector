@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -50,4 +50,4 @@ if (!defined('CPD_COMPOSER_INSTALL')) {
 
 require CPD_COMPOSER_INSTALL;
 
-ProjectQualityDetector\Application\ConsoleApplication::main();
+ProjectQualityInspector\Application\ConsoleApplication::main();

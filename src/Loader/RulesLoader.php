@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,17 +8,17 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Loader;
+namespace ProjectQualityInspector\Loader;
 
-use ProjectQualityDetector\Iterator\RuleFilterIterator;
-use ProjectQualityDetector\Rule\ConfigFilesExistsRule;
+use ProjectQualityInspector\Iterator\RuleFilterIterator;
+use ProjectQualityInspector\Rule\ConfigFilesExistsRule;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class RulesLoader
  *
- * @package ProjectQualityDetector\Loader
+ * @package ProjectQualityInspector\Loader
  */
 class RulesLoader
 {

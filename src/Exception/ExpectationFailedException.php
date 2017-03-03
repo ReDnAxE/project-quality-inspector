@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,15 +8,15 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Exception;
+namespace ProjectQualityInspector\Exception;
 
-use ProjectQualityDetector\Rule\RuleInterface;
+use ProjectQualityInspector\Rule\RuleInterface;
 use Exception;
 
 /**
  * Class ExpectationFailedException
  *
- * @package ProjectQualityDetector\Exception
+ * @package ProjectQualityInspector\Exception
  */
 class ExpectationFailedException extends \RuntimeException
 {

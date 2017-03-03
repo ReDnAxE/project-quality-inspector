@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,14 +8,14 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Rule;
+namespace ProjectQualityInspector\Rule;
 
-use ProjectQualityDetector\Exception\RuleViolationException;
+use ProjectQualityInspector\Exception\RuleViolationException;
 
 /**
  * Class AbstractRule
  *
- * @package ProjectQualityDetector\Rule
+ * @package ProjectQualityInspector\Rule
  */
 abstract class AbstractRule implements RuleInterface
 {

@@ -1,6 +1,6 @@
 <?php
 $header = <<<'EOF'
-This file is part of project-quality-detector.
+This file is part of project-quality-inspector.
 
 (c) Alexandre GESLIN <alexandre@gesl.in>
 

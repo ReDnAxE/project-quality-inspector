@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Command;
+namespace ProjectQualityInspector\Command;
 
-use ProjectQualityDetector\Application\UIHelper;
-use ProjectQualityDetector\Exception\RuleViolationException;
-use ProjectQualityDetector\Loader\RulesLoader;
+use ProjectQualityInspector\Application\UIHelper;
+use ProjectQualityInspector\Exception\RuleViolationException;
+use ProjectQualityInspector\Loader\RulesLoader;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -81,8 +81,8 @@ class MainCommand extends Command
     protected function getConfigFile()
     {
         $configsToSearch = [
-            getcwd() . '/pqd.yml',
-            __DIR__ . '/../../pqd.yml'
+            getcwd() . '/pqi.yml',
+            __DIR__ . '/../../pqi.yml'
         ];
 
         return (file_exists($configsToSearch[0])) ? $configsToSearch[0] : $configsToSearch[1];

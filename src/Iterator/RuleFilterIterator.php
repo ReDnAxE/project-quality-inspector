@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of project-quality-detector.
+ * This file is part of project-quality-inspector.
  *
  * (c) Alexandre GESLIN <alexandre@gesl.in>
  *
@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityDetector\Iterator;
+namespace ProjectQualityInspector\Iterator;
 
 /**
  * Class RuleFilterIterator
  *
- * @package ProjectQualityDetector\Iterator
+ * @package ProjectQualityInspector\Iterator
  */
 class RuleFilterIterator extends \FilterIterator
 {

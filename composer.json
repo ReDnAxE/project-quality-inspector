@@ -1,9 +1,10 @@
 {
-  "name": "rednaxe/project-quality-detector",
-  "description": "Project Quality Detector provides a pqd command which checks Projects good practices thanks to customisable rules",
+  "name": "rednaxe/project-quality-inspector",
+  "description": "Project Quality Inspector provides a pqi command which checks Projects good practices thanks to customisable rules",
   "type": "library",
   "keywords": [
     "quality",
+    "framework",
     "testing",
     "symfony",
     "angular",
@@ -11,7 +12,7 @@
     "javascript",
     "ci"
   ],
-  "homepage": "https://github.com/rednaxe/project-quality-detector",
+  "homepage": "https://github.com/rednaxe/project-quality-inspector",
   "license": "BSD-3-Clause",
   "authors": [
     {
@@ -21,10 +22,10 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/rednaxe/project-quality-detector/issues"
+    "issues": "https://github.com/rednaxe/project-quality-inspector/issues"
   },
   "require": {
-    "php": "^5.5||^7.0",
+    "php": "^5.6||^7.0",
     "symfony/console": "~2.7|~3.0",
     "symfony/yaml": "~2.7|~3.0"
   },
@@ -35,7 +36,7 @@
     "ext-xdebug": "*"
   },
   "bin": [
-    "pqd"
+    "pqi"
   ],
   "autoload": {
     "classmap": [
