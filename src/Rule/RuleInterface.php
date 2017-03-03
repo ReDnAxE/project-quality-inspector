@@ -40,16 +40,6 @@ interface RuleInterface
     public function getConfig();
 
     /**
-     * @return string
-     */
-    public function getExplaination();
-
-    /**
-     * @param $explaination
-     */
-    public function setExplaination($explaination);
-
-    /**
      * @return array
      */
     public static function getGroups();

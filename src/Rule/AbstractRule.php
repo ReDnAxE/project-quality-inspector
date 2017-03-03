@@ -30,22 +30,11 @@ abstract class AbstractRule implements RuleInterface
     protected $baseDir;
 
     /**
-     * @var array
-     */
-    protected $failures;
-
-    /**
-     * @var string
-     */
-    protected $explaination;
-
-    /**
      * @inheritdoc
      */
     public function __construct(array $config, $baseDir)
     {
         $this->config = $config;
-        $this->failures = array();
         $this->baseDir = $baseDir;
     }
 
@@ -55,22 +44,6 @@ abstract class AbstractRule implements RuleInterface
     public function getConfig()
     {
         return $this->config;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExplaination()
-    {
-        return $this->explaination;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setExplaination($explaination)
-    {
-        $this->explaination = $explaination;
     }
 
     /**
@@ -92,14 +65,6 @@ abstract class AbstractRule implements RuleInterface
         $name = strtolower($name);
 
         return $name;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getFailuresDescription()
-    {
-        return $this->failures;
     }
 
     /**

@@ -47,7 +47,7 @@ class MainCommand extends Command
         $exitCode = $this::SUCCESS_EXIT;
 
         $applicationType = $input->getArgument('applicationType');
-        $baseDir = $input->getOption('baseDir') ? $input->getOption('baseDir') : getcwd();
+        $baseDir = $this->resolveBaseDirOption($input);
         $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile(); //TODO: check
 
         $rulesLoader = new RulesLoader();
@@ -60,7 +60,7 @@ class MainCommand extends Command
             return $this::FAILURE_EXIT;
         }
 
-        UIHelper::displayStartingBlock($output, $configFile);
+        UIHelper::displayStartingBlock($output, $configFile, $this->getApplication()->getVersion());
 
         foreach ($rules as $rule) {
             try {
@@ -86,5 +86,16 @@ class MainCommand extends Command
         ];
 
         return (file_exists($configsToSearch[0])) ? $configsToSearch[0] : $configsToSearch[1];
+    }
+
+    /**
+     * @param InputInterface $input
+     * @return string
+     */
+    protected function resolveBaseDirOption(InputInterface $input)
+    {
+        $baseDir = $input->getOption('baseDir') ? getcwd() . DIRECTORY_SEPARATOR . $input->getOption('baseDir') : getcwd();
+
+        return $baseDir;
     }
 }

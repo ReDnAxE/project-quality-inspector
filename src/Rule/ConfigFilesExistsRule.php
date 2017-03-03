@@ -19,9 +19,9 @@ use ProjectQualityDetector\Exception\ExpectationFailedException;
  */
 class ConfigFilesExistsRule extends AbstractRule
 {
-    public function __construct(array $config, $basePath)
+    public function __construct(array $config, $baseDir)
     {
-        parent::__construct($config, $basePath);
+        parent::__construct($config, $baseDir);
     }
 
     /**
@@ -30,9 +30,10 @@ class ConfigFilesExistsRule extends AbstractRule
     public function evaluate()
     {
         $expectationsFailedExceptions = [];
+
         foreach ($this->config as $fileConf) {
             try {
-                $this->expectsFileExists($fileConf);
+                $this->expectsFileExists($this->baseDir . DIRECTORY_SEPARATOR . $fileConf);
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
             }

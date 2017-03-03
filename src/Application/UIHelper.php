@@ -19,10 +19,11 @@ class UIHelper
     /**
      * @param OutputInterface $output
      * @param string $configFile
+     * @param string $version
      */
-    public static function displayStartingBlock(OutputInterface $output, $configFile)
+    public static function displayStartingBlock(OutputInterface $output, $configFile, $version)
     {
-        $output->writeln(sprintf('<question>Starting Project Quality Detector with config file "%s"</question>', $configFile));
+        $output->writeln(sprintf('<question>Starting Project Quality Detector v%s with config file "%s"</question>', $version, $configFile));
     }
 
     /**

@@ -34,16 +34,7 @@ class RulesLoader
      */
     public function load($configFile, $applicationType, $baseDir)
     {
-        if (!file_exists($configFile)) {
-            throw new \InvalidArgumentException(sprintf('config file "%s" not found.', $configFile));
-        }
-
-        try {
-            $configs = Yaml::parse(file_get_contents($configFile));
-        } catch (ParseException $e) {
-            throw new \InvalidArgumentException(sprintf("unable to parse the YAML string in file %s: %s", $configFile, $e->getMessage()));
-        }
-
+        $configs = $this->parseFileContent($configFile);
         $existingRules = $this->getExistingRules();
 
         if (!isset($configs[$applicationType])) {
@@ -64,6 +55,25 @@ class RulesLoader
         }
 
         return new RuleFilterIterator($rules, []);
+    }
+
+    /**
+     * @param $configFile
+     * @return array
+     */
+    protected function parseFileContent($configFile)
+    {
+        if (!file_exists($configFile)) {
+            throw new \InvalidArgumentException(sprintf('config file "%s" not found.', $configFile));
+        }
+
+        try {
+            $configs = Yaml::parse(file_get_contents($configFile));
+        } catch (ParseException $e) {
+            throw new \InvalidArgumentException(sprintf("unable to parse the YAML string in file %s: %s", $configFile, $e->getMessage()));
+        }
+
+        return $configs;
     }
 
     /**
