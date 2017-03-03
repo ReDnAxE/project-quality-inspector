@@ -22,33 +22,38 @@ use Symfony\Component\Yaml\Yaml;
  */
 class RulesLoader
 {
-    const APPLICATION_ALL = 'common';
+    const COMMON_RULES = 'common';
 
     /**
      * @param string $configFile
      * @param string $applicationType
      * @param string $baseDir
-     * @return bool|RuleFilterIterator
+     * @return RuleFilterIterator
+     *
+     * @throws \InvalidArgumentException
      */
     public function load($configFile, $applicationType, $baseDir)
     {
+        if (!file_exists($configFile.'tes')) {
+            throw new \InvalidArgumentException(sprintf('config file "%s" not found.', $configFile));
+        }
+
         try {
             $configs = Yaml::parse(file_get_contents($configFile));
         } catch (ParseException $e) {
-            printf("Unable to parse the YAML string in file %s: %s", $configFile, $e->getMessage());
-
-            return false;
+            throw new \InvalidArgumentException(sprintf("unable to parse the YAML string in file %s: %s", $configFile, $e->getMessage()));
         }
 
         $existingRules = $this->getExistingRules();
 
-        $config = [];
-        if (isset($configs[$applicationType])) {
-            $config = $configs[$applicationType];
+        if (!isset($configs[$applicationType])) {
+            throw new \InvalidArgumentException(sprintf('application type "%s" does not exists in config file.', $applicationType));
         }
 
-        if (isset($configs[$this::APPLICATION_ALL])) {
-            $config = array_merge_recursive($config, $configs[$this::APPLICATION_ALL]);
+        $config = $configs[$applicationType];
+
+        if (isset($configs[$this::COMMON_RULES])) {
+            $config = array_merge_recursive($config, $configs[$this::COMMON_RULES]);
         }
 
         $rules = new \ArrayIterator();

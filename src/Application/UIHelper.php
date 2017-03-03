@@ -48,4 +48,13 @@ class UIHelper
             $output->writeln(sprintf('<comment>Expectation failed: %s.%s</comment>', $expectationFailedException->getMessage(), $reason));
         }
     }
+
+    /**
+     * @param \Exception $e
+     * @param OutputInterface $output
+     */
+    public static function displayException(\Exception $e, OutputInterface $output)
+    {
+        $output->writeln(sprintf('<error>Error: %s</error>', $e->getMessage()));
+    }
 }

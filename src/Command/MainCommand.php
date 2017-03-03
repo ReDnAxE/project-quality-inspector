@@ -51,7 +51,14 @@ class MainCommand extends Command
         $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile(); //TODO: check
 
         $rulesLoader = new RulesLoader();
-        $rules = $rulesLoader->load($configFile, $applicationType, $baseDir);
+
+        try {
+            $rules = $rulesLoader->load($configFile, $applicationType, $baseDir);
+        } catch (\InvalidArgumentException $e) {
+            UIHelper::displayException($e, $output);
+
+            return $this::FAILURE_EXIT;
+        }
 
         UIHelper::displayStartingBlock($output, $configFile);
 
