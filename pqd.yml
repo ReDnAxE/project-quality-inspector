@@ -2,6 +2,7 @@ symfony:
     config-files-exists-rule:
         - "ruleset.xml"
         - "app/phpunit.xml"
+        - "!web/app_*.php"
         - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
         - "composer.json"
         - "phpcs.xml"

@@ -33,7 +33,7 @@ class ConfigFilesExistsRule extends AbstractRule
 
         foreach ($this->config as $fileConf) {
             try {
-                $this->expectsFileExists($this->baseDir . DIRECTORY_SEPARATOR . $fileConf);
+                $this->expectsFileExists($fileConf, $this->baseDir);
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
             }
@@ -53,9 +53,10 @@ class ConfigFilesExistsRule extends AbstractRule
     }
 
     /**
-     * @param string|array $fileConf
+     * @param $fileConf
+     * @param $baseDir
      */
-    protected function expectsFileExists($fileConf)
+    protected function expectsFileExists($fileConf, $baseDir)
     {
         $fileName = $fileConf;
         $reason = '';
@@ -65,10 +66,44 @@ class ConfigFilesExistsRule extends AbstractRule
             $reason = $fileConf['reason'];
         }
 
-        $message = sprintf('file "%s" does not exists', $fileName);
+        $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
 
-        if (!file_exists($fileName)) {
-            throw new ExpectationFailedException($fileName, $message, $reason);
+        if ($fileConf[0] == '!') {
+            $fileName = ltrim($fileName, '!');
+            $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
+            $this->globShouldNotFind($filePath, $reason);
+        } else {
+            $this->globShouldFind($filePath, $reason);
+        }
+    }
+
+    /**
+     * @param $filePath
+     * @param $reason
+     *
+     * @throws ExpectationFailedException
+     */
+    protected function globShouldFind($filePath, $reason)
+    {
+        $message = sprintf('file "%s" does not exists', $filePath);
+
+        if (!count(glob($filePath))) {
+            throw new ExpectationFailedException($filePath, $message, $reason);
+        }
+    }
+
+    /**
+     * @param $filePath
+     * @param $reason
+     *
+     * @throws ExpectationFailedException
+     */
+    protected function globShouldNotFind($filePath, $reason)
+    {
+        $message = sprintf('file "%s" should not exists', $filePath);
+
+        if (count(glob($filePath))) {
+            throw new ExpectationFailedException($filePath, $message, $reason);
         }
     }
 }
