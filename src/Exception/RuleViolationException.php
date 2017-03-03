@@ -27,17 +27,39 @@ class RuleViolationException extends \RuntimeException
     protected $rule;
 
     /**
+     * @var ExpectationFailedException[]
+     */
+    protected $expectationFailedExceptions;
+
+    /**
      * RuleViolationException constructor.
      *
      * @param RuleInterface $rule
-     * @param string $message
+     * @param array $expectationFailedExceptions
      * @param int $code
      * @param Exception|null $previous
      */
-    public function __construct(RuleInterface $rule, $message = "", $code = 0, Exception $previous = null)
+    public function __construct(RuleInterface $rule, array $expectationFailedExceptions, $code = 0, Exception $previous = null)
     {
-        parent::__construct($rule->getRuleName() . ': ' . $message, $code, $previous);
+        parent::__construct($rule::getRuleName() . ': KO', $code, $previous);
 
         $this->rule = $rule;
+        $this->expectationFailedExceptions = $expectationFailedExceptions;
+    }
+
+    /**
+     * @return RuleInterface
+     */
+    public function getRule()
+    {
+        return $this->rule;
+    }
+
+    /**
+     * @return ExpectationFailedException[]
+     */
+    public function getExpectationFailedExceptions()
+    {
+        return $this->expectationFailedExceptions;
     }
 }

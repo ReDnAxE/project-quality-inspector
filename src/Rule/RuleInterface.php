@@ -10,6 +10,8 @@
 
 namespace ProjectQualityDetector\Rule;
 
+use ProjectQualityDetector\Exception\RuleViolationException;
+
 /**
  * Interface RuleInterface
  *
@@ -27,6 +29,8 @@ interface RuleInterface
 
     /**
      * @return mixed
+     *
+     * @throws RuleViolationException
      */
     public function evaluate();
 

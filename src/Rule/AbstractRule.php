@@ -10,6 +10,8 @@
 
 namespace ProjectQualityDetector\Rule;
 
+use ProjectQualityDetector\Exception\RuleViolationException;
+
 /**
  * Class AbstractRule
  *
@@ -72,14 +74,6 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * @return array
-     */
-    protected function getFailuresDescription()
-    {
-        return $this->failures;
-    }
-
-    /**
      * @inheritdoc
      */
     public static function getGroups()
@@ -98,5 +92,21 @@ abstract class AbstractRule implements RuleInterface
         $name = strtolower($name);
 
         return $name;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getFailuresDescription()
+    {
+        return $this->failures;
+    }
+
+    /**
+     * @param array $expectationFailedExceptions
+     */
+    protected function throwRuleViolationException(array $expectationFailedExceptions)
+    {
+        throw new RuleViolationException($this, $expectationFailedExceptions);
     }
 }

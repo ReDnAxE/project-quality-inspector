@@ -10,7 +10,7 @@
 
 namespace ProjectQualityDetector\Rule;
 
-use ProjectQualityDetector\Exception\RuleViolationException;
+use ProjectQualityDetector\Exception\ExpectationFailedException;
 
 /**
  * Class ConfigFilesRuleInterface
@@ -29,15 +29,17 @@ class ConfigFilesExistsRule extends AbstractRule
      */
     public function evaluate()
     {
-        $filesNotExists = [];
-        foreach ($this->config as $file) {
-            if (!file_exists($file)) {
-                $filesNotExists[] = $file;
+        $expectationsFailedExceptions = [];
+        foreach ($this->config as $fileConf) {
+            try {
+                $this->expectsFileExists($fileConf);
+            } catch (ExpectationFailedException $e) {
+                $expectationsFailedExceptions[] = $e;
             }
         }
 
-        if (count($filesNotExists)) {
-            throw new RuleViolationException($this, sprintf('File(s) does not exists in project : %s', implode(', ', $filesNotExists)));
+        if (count($expectationsFailedExceptions)) {
+            $this->throwRuleViolationException($expectationsFailedExceptions);
         }
     }
 
@@ -47,5 +49,25 @@ class ConfigFilesExistsRule extends AbstractRule
     public static function getGroups()
     {
         return array_merge(parent::getGroups(), ['config']);
+    }
+
+    /**
+     * @param string|array $fileConf
+     */
+    protected function expectsFileExists($fileConf)
+    {
+        $fileName = $fileConf;
+        $reason = '';
+
+        if (is_array($fileConf)) {
+            $fileName = $fileConf['filename'];
+            $reason = $fileConf['reason'];
+        }
+
+        $message = sprintf('file "%s" does not exists', $fileName);
+
+        if (!file_exists($fileName)) {
+            throw new ExpectationFailedException($fileName, $message, $reason);
+        }
     }
 }

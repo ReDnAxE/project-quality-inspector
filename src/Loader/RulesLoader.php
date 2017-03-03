@@ -22,7 +22,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class RulesLoader
 {
-    const APPLICATION_ALL = 'all';
+    const APPLICATION_ALL = 'common';
 
     /**
      * @param string $configFile

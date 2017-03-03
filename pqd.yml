@@ -2,6 +2,7 @@ symfony:
     config-files-exists-rule:
         - "ruleset.xml"
         - "app/phpunit.xml"
+        - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
         - "composer.json"
         - "phpcs.xml"
         - "phpmd.xml"
@@ -9,6 +10,6 @@ angularjs:
     config-files-exists-rule:
         - "package.json"
         - ".eslintrc"
-all:
+common:
     config-files-exists-rule:
         - ".gitignore"

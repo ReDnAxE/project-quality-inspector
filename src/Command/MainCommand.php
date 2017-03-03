@@ -10,6 +10,7 @@
 
 namespace ProjectQualityDetector\Command;
 
+use ProjectQualityDetector\Application\UIHelper;
 use ProjectQualityDetector\Exception\RuleViolationException;
 use ProjectQualityDetector\Loader\RulesLoader;
 use Symfony\Component\Console\Command\Command;
@@ -43,6 +44,8 @@ class MainCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $exitCode = $this::SUCCESS_EXIT;
+
         $applicationType = $input->getArgument('applicationType');
         $baseDir = $input->getOption('baseDir') ? $input->getOption('baseDir') : getcwd();
         $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile(); //TODO: check
@@ -50,16 +53,19 @@ class MainCommand extends Command
         $rulesLoader = new RulesLoader();
         $rules = $rulesLoader->load($configFile, $applicationType, $baseDir);
 
+        UIHelper::displayStartingBlock($output, $configFile);
+
         foreach ($rules as $rule) {
             try {
                 $rule->evaluate();
+                UIHelper::displayRuleSuccess($rule, $output);
             } catch (RuleViolationException $e) {
-                //$this->fail($other, $description);
-                echo $e->getMessage();
+                UIHelper::displayRuleViolation($e, $output);
+                $exitCode = $this::FAILURE_EXIT;
             }
         }
 
-        return $this::SUCCESS_EXIT;
+        return $exitCode;
     }
 
     /**
