@@ -1,8 +1,8 @@
 Project Quality Inspector
 -------------------------
 
-ProjectQualityInspector is a PHP script `pqi` which checks project good practices.
-This generic quality tool will check your projects through various configurable rules.
+ProjectQualityInspector is a PHP script `pqi` which checks project custom good practices.
+This generic quality checking tool will check your projects through various configurable rules.
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/rednaxe/project-quality-inspector.svg?style=flat-square)](https://packagist.org/packages/rednaxe/project-quality-inspector)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
@@ -27,13 +27,14 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.0.1
+composer require --dev rednaxe/project-quality-inspector ^1.0.3
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
 
 Usage
 -----
+
 
 First, you have to create a pqi.yml configuration file in your project. If there is no configuration file in current directory, by default the example pqi.yml will be used.
 
@@ -42,14 +43,15 @@ The first level of configuration is up to you. When you will run the command, yo
 $ ./bin/pqi mycustomconfig
 ```
 
-You can use ``-c`` or ``--configFile`` option to change the default configuration path :
+For Symfony 2.*, you will have to add ``run`` key like this :
+
 ```bash
-$ ./bin/pqi mycustomconfig -c config/pqi.yml
+$ ./bin/pqi run mycustomconfig
 ```
 
-You can use ``-b`` or ``--baseDir`` option to change the default inspection base directory :
+You can use ``-c`` or ``--configFile``, and  option to respectively change the configuration file, and the inspection base directory :
 ```bash
-$ ./bin/pqi mycustomconfig -b Back/src
+$ ./bin/pqi mycustomconfig -c config/pqi.yml -b Back/src
 ```
 
 You can also add a ``common`` section, which will be always merged to the selected section :

@@ -31,7 +31,7 @@ class ConsoleApplication
      */
     public function run()
     {
-        $application = new Application('pqi', '1.0.2');
+        $application = new Application('pqi', '1.0.3');
         $command = new MainCommand();
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);
