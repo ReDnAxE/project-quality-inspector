@@ -9,9 +9,10 @@ This generic quality checking tool will check your projects through various conf
 [![Build Status](https://img.shields.io/travis/ReDnAxE/project-quality-inspector/master.svg?style=flat-square)](https://travis-ci.org/ReDnAxE/project-quality-inspector)
 
 This tool is for you if you want to check in your project if :
-* a file (or a pathname pattern) does not exists
-* a file (or a pathname pattern) should not exists
-* ...
+* a file (or a pathname pattern) should exist, or should not exist
+* a composer package should exist, or should not exist
+* a composer package version should not be wildcarded
+...
 
 Requirements
 ------------
@@ -34,7 +35,6 @@ composer require --dev rednaxe/project-quality-inspector ^1.0.4
 
 Usage
 -----
-
 
 First, you have to create a pqi.yml configuration file in your project. If there is no configuration file in current directory, by default the example pqi.yml will be used.
 
@@ -67,7 +67,11 @@ common:
         - ".gitignore.yml"
 ```
 
-Here is a list of existing rules, and possible configuration :
+RULES
+-----
+
+A rule is loaded when the rule key is present in configuration.
+Here is a list of existing rules, and possible configurations :
 
 * config-files-exists-rule config example:
 
@@ -82,10 +86,23 @@ mycustomconfig:
         - "composer.json"
 ```
 
+* composer-config-rule config example:
+
+```yaml
+mycustomconfig:
+    composer-config-rule:
+        file: "composer.json"
+        disallow-wildcard-versioning: true
+        packages:
+            - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
+            - "phpunit-bridge"
+            - "bruli/php-git-hooks"
+            - "php-cs-fixer"
+```
+
 TODO
 ----
 
 * Creating PHP Archive [PHP Archive (PHAR)](https://php.net/phar)
-* Adding composer-restrictions-rule
 * Tests
 * Find more rules ;)
