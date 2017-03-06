@@ -68,6 +68,32 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
+     * @param array|string $raw
+     * @return array|string
+     */
+    protected function getValue($raw)
+    {
+        if (is_array($raw) && isset($raw['value'])) {
+            return $raw['value'];
+        }
+
+        return $raw;
+    }
+
+    /**
+     * @param array|string $raw
+     * @return array|string|null
+     */
+    protected function getReason($raw)
+    {
+        if (is_array($raw) && isset($raw['reason'])) {
+            return $raw['reason'];
+        }
+
+        return '';
+    }
+
+    /**
      * @param array $expectationFailedExceptions
      */
     protected function throwRuleViolationException(array $expectationFailedExceptions)

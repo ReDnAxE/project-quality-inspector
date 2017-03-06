@@ -58,13 +58,8 @@ class ConfigFilesExistsRule extends AbstractRule
      */
     protected function expectsFileExists($fileConf, $baseDir)
     {
-        $fileName = $fileConf;
-        $reason = '';
-
-        if (is_array($fileConf)) {
-            $fileName = $fileConf['filename'];
-            $reason = $fileConf['reason'];
-        }
+        $fileName = $this->getValue($fileConf);
+        $reason = $this->getReason($fileConf);
 
         $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
 
@@ -85,7 +80,7 @@ class ConfigFilesExistsRule extends AbstractRule
      */
     protected function globShouldFind($filePath, $reason)
     {
-        $message = sprintf('file "%s" does not exists', $filePath);
+        $message = sprintf('file "%s" should exists', $filePath);
 
         if (!count(glob($filePath))) {
             throw new ExpectationFailedException($filePath, $message, $reason);

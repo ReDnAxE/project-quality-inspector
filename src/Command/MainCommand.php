@@ -69,6 +69,8 @@ class MainCommand extends Command
             } catch (RuleViolationException $e) {
                 UIHelper::displayRuleViolation($e, $output);
                 $exitCode = $this::FAILURE_EXIT;
+            } catch (\InvalidArgumentException $e) {
+                UIHelper::displayException($e, $output);
             }
         }
 

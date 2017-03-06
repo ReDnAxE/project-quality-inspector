@@ -4,10 +4,20 @@ symfony:
         - "app/phpunit.xml"
         - "!web/app_*.php"
         - "web/app.php"
-        - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
+        - { value: "app/phpunit.xml", reason: "This file is required for testing code" }
         - "composer.json"
         - "phpcs.xml"
         - "phpmd.xml"
+        - "php-git-hooks.yml"
+        - "README.md"
+    composer-config-rule:
+        file: "composer.json"
+        disallow-wildcard-versioning: true
+        packages:
+            - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
+            - "phpunit-bridge"
+            - "bruli/php-git-hooks"
+            - "php-cs-fixer"
 angularjs:
     config-files-exists-rule:
         - "package.json"

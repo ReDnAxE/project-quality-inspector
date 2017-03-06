@@ -11,6 +11,7 @@
 namespace ProjectQualityInspector\Loader;
 
 use ProjectQualityInspector\Iterator\RuleFilterIterator;
+use ProjectQualityInspector\Rule\ComposerConfigRule;
 use ProjectQualityInspector\Rule\ConfigFilesExistsRule;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -82,7 +83,8 @@ class RulesLoader
     protected function getExistingRules()
     {
         return [
-            call_user_func(ConfigFilesExistsRule::class . '::getRuleName') => ConfigFilesExistsRule::class
+            call_user_func(ConfigFilesExistsRule::class . '::getRuleName') => ConfigFilesExistsRule::class,
+            call_user_func(ComposerConfigRule::class . '::getRuleName') => ComposerConfigRule::class,
         ];
     }
 }

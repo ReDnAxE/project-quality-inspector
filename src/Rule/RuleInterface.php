@@ -30,7 +30,7 @@ interface RuleInterface
     /**
      * @return mixed
      *
-     * @throws RuleViolationException
+     * @throws RuleViolationException|\InvalidArgumentException
      */
     public function evaluate();
 
