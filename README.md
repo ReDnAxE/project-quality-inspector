@@ -67,7 +67,7 @@ common:
         - ".gitignore.yml"
 ```
 
-RULES
+Rules
 -----
 
 A rule is loaded when the rule key is present in configuration.

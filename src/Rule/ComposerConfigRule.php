@@ -41,11 +41,18 @@ class ComposerConfigRule extends AbstractRule
             try {
                 $this->expectsPackagePresence($package, $requirements);
 
-                if ($this->config['disallow-wildcard-versioning']) {
-                    $this->expectsRequirementsHasNoWildCard($requirements);
-                }
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
+            }
+        }
+
+        if ($this->config['disallow-wildcard-versioning']) {
+            foreach ($requirements as $requirement => $version) {
+                try {
+                    $this->expectsRequirementsHasNoWildCard($requirement, $version);
+                } catch (ExpectationFailedException $e) {
+                    $expectationsFailedExceptions[] = $e;
+                }
             }
         }
 
@@ -63,17 +70,17 @@ class ComposerConfigRule extends AbstractRule
     }
 
     /**
-     * @param array $requirements
+     * @param string $requirement
+     * @param string $version
      *
      * @throws ExpectationFailedException
      */
-    protected function expectsRequirementsHasNoWildCard(array $requirements)
+    protected function expectsRequirementsHasNoWildCard($requirement, $version)
     {
-        foreach ($requirements as $requirement => $version) {
-            $message = sprintf('Requirement "%s" should contains at least major version. Version "%s" is not authorized', $requirement, $version);
-            if (!preg_match('/\\d/', $version)) {
-                throw new ExpectationFailedException($requirement, $message);
-            }
+        $message = sprintf('Requirement "%s" should contains at least major explicit version. Version "%s" is not authorized', $requirement, $version);
+
+        if (!preg_match('/\\d/', $version)) {
+            throw new ExpectationFailedException($requirement, $message);
         }
     }
 
