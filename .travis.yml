@@ -9,14 +9,19 @@ matrix:
   fast_finish: true
   include:
     - php: 5.6
-        env: DEPENDENCIES=low
+      env: DEPENDENCIES=low
     - php: 5.6
       env: DEPENDENCIES=high
     - php: 7.0
       env: DEPENDENCIES=low
     - php: 7.0
       env: DEPENDENCIES=high
+    - php: 7.1
+      env: DEPENDENCIES=low
+    - php: 7.1
+      env: DEPENDENCIES=high
     - php: hhvm
+      env: DEPENDENCIES=high
   allow_failures:
     - php: hhvm
 
