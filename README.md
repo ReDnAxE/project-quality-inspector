@@ -28,7 +28,7 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.0.4
+composer require --dev rednaxe/project-quality-inspector ^1.1.0
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
@@ -82,6 +82,7 @@ mycustomconfig:
         - "app/phpunit.xml"
         - "!web/app_*.php"
         - "web/app.php"
+        - "tests/"
         - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
         - "composer.json"
 ```
