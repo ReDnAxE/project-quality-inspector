@@ -106,4 +106,6 @@ TODO
 
 * Creating PHP Archive [PHP Archive (PHAR)](https://php.net/phar)
 * Tests
+* disallow-wildcard-versioning : add current installed version in error message to facilitate explicit versioning correction
+* rule git-branch-lifecycle-rule : count branches not merged in principal branch, alert old branches not merged compared to principal branch
 * Find more rules ;)
