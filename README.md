@@ -9,7 +9,7 @@ This generic quality checking tool will check your projects through various conf
 [![Build Status](https://img.shields.io/travis/ReDnAxE/project-quality-inspector/master.svg?style=flat-square)](https://travis-ci.org/ReDnAxE/project-quality-inspector)
 
 This tool is for you if you want to check in your project if :
-* a file (or a pathname pattern) should exist, or should not exist
+* a file or directory (or a pathname pattern) should exist, or should not exist
 * a composer package should exist, or should not exist
 * a composer package version should not be wildcarded
 ...

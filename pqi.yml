@@ -10,6 +10,7 @@ symfony:
         - "phpmd.xml"
         - "php-git-hooks.yml"
         - "README.md"
+        - "tests/"
     composer-config-rule:
         file: "composer.json"
         disallow-wildcard-versioning: true
