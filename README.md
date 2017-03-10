@@ -106,6 +106,10 @@ TODO
 
 * Creating PHP Archive [PHP Archive (PHAR)](https://php.net/phar)
 * Tests
-* disallow-wildcard-versioning : add current installed version in error message to facilitate explicit versioning correction
-* rule git-branch-lifecycle-rule : count branches not merged in principal branch, and list old risky branches not yet merged compared to principal branch
+* Disallow-wildcard-versioning : add current installed version in error message to facilitate explicit versioning correction
+* [WIP] Rule git-rule :
+  - count branches not merged in principal branches
+  - list merged branches that can be deleted
+  - list old risky branches not yet merged compared to principal branch (precise ahead and behind difference compared to the principal branch if a limit is reached)
+* Add CONTRIBUTING.md file to explain how to easily develop new rule
 * Find more rules ;)
