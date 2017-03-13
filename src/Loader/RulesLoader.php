@@ -13,6 +13,7 @@ namespace ProjectQualityInspector\Loader;
 use ProjectQualityInspector\Iterator\RuleFilterIterator;
 use ProjectQualityInspector\Rule\ComposerConfigRule;
 use ProjectQualityInspector\Rule\ConfigFilesExistsRule;
+use ProjectQualityInspector\Rule\GitRule;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -45,13 +46,13 @@ class RulesLoader
         $config = $configs[$applicationType];
 
         if (isset($configs[$this::COMMON_RULES])) {
-            $config = array_merge_recursive($config, $configs[$this::COMMON_RULES]);
+            $config = array_merge_recursive($config, $configs[$this::COMMON_RULES]); //TODO: test if array_merge do not only concatenate arrays and sub arrays
         }
 
         $rules = new \ArrayIterator();
         foreach ($config as $ruleName => $ruleConfig) {
             if (key_exists($ruleName, $existingRules)) {
-                $rules[] = new $existingRules[$ruleName]($ruleConfig, $baseDir);
+                $rules[] = new $existingRules[$ruleName]($ruleConfig['config'], $baseDir);
             }
         }
 
@@ -85,6 +86,7 @@ class RulesLoader
         return [
             call_user_func(ConfigFilesExistsRule::class . '::getRuleName') => ConfigFilesExistsRule::class,
             call_user_func(ComposerConfigRule::class . '::getRuleName') => ComposerConfigRule::class,
+            call_user_func(GitRule::class . '::getRuleName') => GitRule::class,
         ];
     }
 }

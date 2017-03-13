@@ -13,7 +13,7 @@ namespace ProjectQualityInspector\Rule;
 use ProjectQualityInspector\Exception\ExpectationFailedException;
 
 /**
- * Class ConfigFilesRuleInterface
+ * Class ConfigFilesExistsRule
  *
  * @package ProjectQualityInspector\Rule
  */
@@ -56,14 +56,14 @@ class ConfigFilesExistsRule extends AbstractRule
      * @param $fileConf
      * @param $baseDir
      */
-    protected function expectsFileExists($fileConf, $baseDir)
+    private function expectsFileExists($fileConf, $baseDir)
     {
         $fileName = $this->getValue($fileConf);
         $reason = $this->getReason($fileConf);
 
         $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
 
-        if ($fileConf[0] == '!') {
+        if ((isset($fileConf['value']) && $fileConf['value'][0] == '!') || $fileConf[0] == '!') {
             $fileName = ltrim($fileName, '!');
             $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
             $this->globShouldNotFind($filePath, $reason);
@@ -78,7 +78,7 @@ class ConfigFilesExistsRule extends AbstractRule
      *
      * @throws ExpectationFailedException
      */
-    protected function globShouldFind($filePath, $reason)
+    private function globShouldFind($filePath, $reason)
     {
         $message = sprintf('file "%s" should exists', $filePath);
 
@@ -93,7 +93,7 @@ class ConfigFilesExistsRule extends AbstractRule
      *
      * @throws ExpectationFailedException
      */
-    protected function globShouldNotFind($filePath, $reason)
+    private function globShouldNotFind($filePath, $reason)
     {
         $message = sprintf('file "%s" should not exists', $filePath);
 

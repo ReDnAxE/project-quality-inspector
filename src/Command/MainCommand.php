@@ -48,7 +48,7 @@ class MainCommand extends Command
 
         $applicationType = $input->getArgument('applicationType');
         $baseDir = $this->resolveBaseDirOption($input);
-        $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile(); //TODO: check
+        $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile();
 
         $rulesLoader = new RulesLoader();
 

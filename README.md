@@ -101,11 +101,36 @@ mycustomconfig:
             - "php-cs-fixer"
 ```
 
+* git-rule
+
+When we have more git branches than developers in a project, it's sometimes difficult to avoid merge conflicts. Then when it's time to build a package, it's generally too late to rebase, merge or clean each branch individually.
+In order to prevent conflicts risks, this rule helps you to detects :
+- large number of already merged branches (and suggests you to delete thoses branches)
+- branches that should be updated by at least 30 days old work from stable branches
+
+config example:
+
+```yaml
+mycustomconfig:
+    composer-config-rule:
+        file: "composer.json"
+        disallow-wildcard-versioning: true
+        packages:
+            - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
+            - "phpunit-bridge"
+            - "bruli/php-git-hooks"
+            - "php-cs-fixer"
+```
+
 TODO
 ----
 
 * Creating PHP Archive [PHP Archive (PHAR)](https://php.net/phar)
 * Tests
-* disallow-wildcard-versioning : add current installed version in error message to facilitate explicit versioning correction
-* rule git-branch-lifecycle-rule : count branches not merged in principal branch, and list old risky branches not yet merged compared to principal branch
+* Disallow-wildcard-versioning : add current installed version in error message to facilitate explicit versioning correction
+* Add notice / alert level concept for expectations in each rule config
+* [WIP] Rule git-rule :
+  - set ignored branches
+  - expects too old branches
+* Add CONTRIBUTING.md file to explain how to easily develop new rule
 * Find more rules ;)
