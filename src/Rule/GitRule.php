@@ -46,7 +46,7 @@ class GitRule extends AbstractRule
         try {
             foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
                 $this->expectsBranchNotTooBehind($notMergedBranchInfo, $stableBranches);
-                //$this->expectsBranchNotTooBehind($notMergedBranch); //TODO
+                $this->expectsBranchNotTooOld($notMergedBranchInfo, $stableBranches); //TODO
             }
         } catch (ExpectationFailedException $e) {
             $expectationsFailedExceptions[] = $e;
@@ -99,29 +99,22 @@ class GitRule extends AbstractRule
             $lrAheadCommitsCount = $this->getLeftRightAheadCommitsCountAfterMergeBase($stableBranch, $notMergedBranchInfo[4]);
 
             if ($interval->format('a') >= (int)$this->config['too-old-stable-work-not-in-branch-threshold']) {
-                $message = sprintf('The branch %s is behind %s by %s commit(s), that contain more than %s days old work. You should update your branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[0], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[4]);
+                $message = sprintf('The branch %s is behind %s by %s commit(s), that contain more than %s days old work. %s should update the branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[0], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
                 throw new ExpectationFailedException($notMergedBranchInfo, $message);
             }
-
-            //Get branch first commit date for displaying branch age ?
-
-
-            //Branch too old: branch which his last commit is older than 30 days
-            //Branch
         }
     }
 
     /**
-     * @param array $notMergedBranch
+     * @param array $notMergedBranchInfo
      * @param array $stableBranches
      *
      * @throws ExpectationFailedException
      */
-    private function expectsBranchNotTooOld(array $notMergedBranch, array $stableBranches)
+    private function expectsBranchNotTooOld(array $notMergedBranchInfo, array $stableBranches)
     {
         foreach ($stableBranches as $stableBranch) {
-            //> check if there is to much ahead commits in $stableBranch compared to $notMergedBranch ?? OR:
-            //> check if branch is old (stableBranch last commit - notMergedBranch last commit)
+            //TODO check if branch is too old (stableBranch last commit - notMergedBranch last commit)
         }
     }
 
