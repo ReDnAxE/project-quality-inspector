@@ -82,6 +82,8 @@ class GitRule extends AbstractRule
     }
 
     /**
+     * Retrieve two first commits dates after common ancestor of the two branches, and expects there
+     *
      * @param array $notMergedBranchInfo
      * @param array $stableBranches
      *
@@ -90,20 +92,16 @@ class GitRule extends AbstractRule
     private function expectsBranchNotTooBehind(array $notMergedBranchInfo, array $stableBranches)
     {
         foreach ($stableBranches as $stableBranch) {
-            //$stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
-            $stableBranchFirstCommitInfo = $this->getBranchLastCommitInfo($stableBranch);
-            print_r($stableBranchFirstCommitInfo);
+            $stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
 
-            /*$interval = $this->getBranchesInfosDatesDiff($stableBranchInfo, $notMergedBranchInfo);
+            $interval = $this->getBranchesInfosDatesDiff($stableBranchFirstCommitInfo, $notMergedBranchInfo);
 
             $lrAheadCommitsCount = $this->getLeftRightAheadCommitsCountAfterMergeBase($stableBranch, $notMergedBranchInfo[4]);
 
-            print_r($lrAheadCommitsCount);
-
-            if ($interval->format('a') >= 0) {
-                $message = sprintf('The branch %s is behind %s for %s days (by %s commit(s))', $notMergedBranchInfo[4], $stableBranch, 30, $lrAheadCommitsCount[0]);
+            if ($interval->format('a') >= (int)$this->config['too-old-stable-work-not-in-branch-threshold']) {
+                $message = sprintf('The branch %s is behind %s by %s commit(s), that contain more than %s days old work. You should update your branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[0], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[4]);
                 throw new ExpectationFailedException($notMergedBranchInfo, $message);
-            }*/
+            }
 
             //Get branch first commit date for displaying branch age ?
 

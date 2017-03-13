@@ -26,8 +26,8 @@ symfony:
             stable-branches-regex:
                 - "origin/gitrule"
             ignored-branches-regex: ~ #TODO implements in code
-            too-old-not-merged-branche-since: "3 weeks" #strtotime format
-            threshold-too-many-merged-branches: 2
+            too-old-stable-work-not-in-branch-threshold: "30" #in days
+            threshold-too-many-merged-branches: 1
 angularjs:
     config-files-exists-rule:
         config:
