@@ -41,11 +41,13 @@ class GitRule extends AbstractRule
             $expectationsFailedExceptions[] = $e;
         }
 
-        $notMergedBranches = $this->listMergedOrNotMergedBranches($stableBranches, false);
+        $notMergedBranchesInfo = $this->listMergedOrNotMergedBranches($stableBranches, false);
 
         try {
-            print_r($notMergedBranches);
-            //TODO: for each no merged branches, expectsBranchNotTooOld, expectsBranchNotTooBehind
+            foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
+                $this->expectsBranchNotTooBehind($notMergedBranchInfo, $stableBranches);
+                //$this->expectsBranchNotTooBehind($notMergedBranch); //TODO
+            }
         } catch (ExpectationFailedException $e) {
             $expectationsFailedExceptions[] = $e;
         }
@@ -56,12 +58,20 @@ class GitRule extends AbstractRule
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function getGroups()
+    {
+        return array_merge(parent::getGroups(), ['git']);
+    }
+
+    /**
      * @param array $stableBranches
      * @param int $threshold
      *
      * @throws ExpectationFailedException
      */
-    public function expectsNoMergedBranches(array $stableBranches, $threshold)
+    private function expectsNoMergedBranches(array $stableBranches, $threshold)
     {
         if ($mergedBranches = $this->listMergedOrNotMergedBranches($stableBranches, true)) {
             if (count($mergedBranches) >= $threshold) {
@@ -72,11 +82,49 @@ class GitRule extends AbstractRule
     }
 
     /**
-     * @inheritdoc
+     * @param array $notMergedBranchInfo
+     * @param array $stableBranches
+     *
+     * @throws ExpectationFailedException
      */
-    public static function getGroups()
+    private function expectsBranchNotTooBehind(array $notMergedBranchInfo, array $stableBranches)
     {
-        return array_merge(parent::getGroups(), ['git']);
+        foreach ($stableBranches as $stableBranch) {
+            //$stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
+            $stableBranchFirstCommitInfo = $this->getBranchLastCommitInfo($stableBranch);
+            print_r($stableBranchFirstCommitInfo);
+
+            /*$interval = $this->getBranchesInfosDatesDiff($stableBranchInfo, $notMergedBranchInfo);
+
+            $lrAheadCommitsCount = $this->getLeftRightAheadCommitsCountAfterMergeBase($stableBranch, $notMergedBranchInfo[4]);
+
+            print_r($lrAheadCommitsCount);
+
+            if ($interval->format('a') >= 0) {
+                $message = sprintf('The branch %s is behind %s for %s days (by %s commit(s))', $notMergedBranchInfo[4], $stableBranch, 30, $lrAheadCommitsCount[0]);
+                throw new ExpectationFailedException($notMergedBranchInfo, $message);
+            }*/
+
+            //Get branch first commit date for displaying branch age ?
+
+
+            //Branch too old: branch which his last commit is older than 30 days
+            //Branch
+        }
+    }
+
+    /**
+     * @param array $notMergedBranch
+     * @param array $stableBranches
+     *
+     * @throws ExpectationFailedException
+     */
+    private function expectsBranchNotTooOld(array $notMergedBranch, array $stableBranches)
+    {
+        foreach ($stableBranches as $stableBranch) {
+            //> check if there is to much ahead commits in $stableBranch compared to $notMergedBranch ?? OR:
+            //> check if branch is old (stableBranch last commit - notMergedBranch last commit)
+        }
     }
 
     /**
@@ -122,8 +170,7 @@ class GitRule extends AbstractRule
     private function getLeftRightAheadCommitsCountAfterMergeBase($branchLeft, $branchRight)
     {
         $result = ProcessHelper::execute(sprintf('git rev-list --left-right --count %s...%s', $branchLeft, $branchRight), $this->baseDir);
-        print_r($result);
-        //TODO
+        $result = explode("\t", $result[0]);
 
         return $result;
     }
@@ -149,12 +196,42 @@ class GitRule extends AbstractRule
      *
      * @param string $baseBranch
      * @param string $branch
+     * @return string
      */
-    private function getBranchFirstCommit($baseBranch, $branch)
+    private function getBranchFirstCommitInfo($baseBranch, $branch)
     {
         $result = ProcessHelper::execute(sprintf('git log --format="%s" %s..%s | tail -1', $this->commitFormat, $baseBranch, $branch), $this->baseDir);
-        print_r($result);
-        //TODO
+        $branchInfo = explode('|', $result[0]);
+        $branchInfo[] = $branch;
+
+        return $branchInfo;
+    }
+
+    /**
+     * @param $branchInfoLeft
+     * @param $branchInfoRight
+     * @return bool|\DateInterval
+     */
+    private function getBranchesInfosDatesDiff($branchInfoLeft, $branchInfoRight)
+    {
+        $format = 'Y-m-!d H:i:s O';
+        $dateLeft = \DateTime::createFromFormat($format, $branchInfoLeft[1]);
+        $dateRight = \DateTime::createFromFormat($format, $branchInfoRight[1]);
+
+        return $dateLeft->diff($dateRight);
+    }
+
+    /**
+     * @param $branch
+     * @return string
+     */
+    private function getBranchLastCommitInfo($branch)
+    {
+        $result = ProcessHelper::execute(sprintf('git show --format="%s" %s | head -n 1', $this->commitFormat, $branch), $this->baseDir);
+        $branchInfo = explode('|', $result[0]);
+        $branchInfo[] = $branch;
+
+        return $branchInfo;
     }
 
     /**
@@ -163,9 +240,8 @@ class GitRule extends AbstractRule
     private function getStableBranches()
     {
         $result = ProcessHelper::execute(sprintf('git branch -r | grep -e "%s"', $this->getStableBranchesRegex()), $this->baseDir);
-        $result = array_map("trim", $result);
 
-        return $result;
+        return array_map("trim", $result);
     }
 
     /**
