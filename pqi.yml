@@ -24,7 +24,7 @@ symfony:
     git-rule:
         config:
             stable-branches-regex:
-                - "origin/gitrule"
+                - "origin/master"
             ignored-branches-regex: ~ #TODO implements in code
             too-old-stable-work-not-in-branch-threshold: "30" #in days
             threshold-too-many-merged-branches: 1
