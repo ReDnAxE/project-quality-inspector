@@ -95,6 +95,8 @@ abstract class AbstractRule implements RuleInterface
 
     /**
      * @param array $expectationFailedExceptions
+     *
+     * @throws RuleViolationException
      */
     protected function throwRuleViolationException(array $expectationFailedExceptions)
     {

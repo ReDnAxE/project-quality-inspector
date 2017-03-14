@@ -131,10 +131,7 @@ TODO
 
 * Creating PHP Archive [PHP Archive (PHAR)](https://php.net/phar)
 * Tests
-* Disallow-wildcard-versioning : add current installed version in error message to facilitate explicit versioning correction
+* composer-config-rule: disallow-wildcard-versioning > add current installed version in error message to facilitate explicit versioning correction
 * Add notice / alert level concept for expectations in each rule config
-* [WIP] Rule git-rule :
-  - set ignored branches
-  - expects too old branches
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
 * Find more rules ;)

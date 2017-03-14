@@ -25,9 +25,9 @@ symfony:
         config:
             stable-branches-regex:
                 - "origin/master"
-            ignored-branches-regex: ~ #TODO implements in code
+            ignored-branches-regex: ~ #TODO check if it works
             too-old-stable-work-not-in-branch-threshold: "20" #in days
-            threshold-too-many-merged-branches: 0
+            threshold-too-many-merged-branches: 5
 angularjs:
     config-files-exists-rule:
         config:

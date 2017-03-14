@@ -46,7 +46,6 @@ class GitRule extends AbstractRule
         try {
             foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
                 $this->expectsBranchNotTooBehind($notMergedBranchInfo, $stableBranches);
-                $this->expectsBranchNotTooOld($notMergedBranchInfo, $stableBranches); //TODO
             }
         } catch (ExpectationFailedException $e) {
             $expectationsFailedExceptions[] = $e;
@@ -107,19 +106,6 @@ class GitRule extends AbstractRule
     }
 
     /**
-     * @param array $notMergedBranchInfo
-     * @param array $stableBranches
-     *
-     * @throws ExpectationFailedException
-     */
-    private function expectsBranchNotTooOld(array $notMergedBranchInfo, array $stableBranches)
-    {
-        foreach ($stableBranches as $stableBranch) {
-            //TODO check if branch is too old (stableBranch last commit - notMergedBranch last commit)
-        }
-    }
-
-    /**
      * Get merged/not merged branches compared to $stablesBranches.
      * If there is multiple stable branches, and $merged = true : list branches that are merged in at least one of the stable branches
      * If there is multiple stable branches, and $merged = false : list branches that are not merged for any of the stable branches
@@ -134,7 +120,7 @@ class GitRule extends AbstractRule
         $mergedOption = ($merged) ? '--merged' : '--no-merged';
 
         foreach ($stableBranches as $stableBranch) {
-            $result = ProcessHelper::execute(sprintf('for branch in `git branch -r %s %s | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $this->getStableBranchesRegex(), $this->commitFormat), $this->baseDir);
+            $result = ProcessHelper::execute(sprintf('for branch in `git branch -r %s %s | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
 
             $branches[$stableBranch] = $result;
         }
@@ -239,19 +225,24 @@ class GitRule extends AbstractRule
      */
     private function getStableBranches()
     {
-        $result = ProcessHelper::execute(sprintf('git branch -r | grep -e "%s"', $this->getStableBranchesRegex()), $this->baseDir);
+        $result = ProcessHelper::execute(sprintf('git branch -r | grep -e "%s"', $this->getBranchesRegex('stable-branches-regex')), $this->baseDir);
 
         return array_map("trim", $result);
     }
 
     /**
+     * @param string $configKey
      * @return string
      */
-    private function getStableBranchesRegex()
+    private function getBranchesRegex($configKey)
     {
-        $stableBranchesRegex = array_map(function ($element) {
-            return '\(^[ ]*'.$element.'$\)';
-        }, $this->config['stable-branches-regex']);
+        $stableBranchesRegex = ['^$'];
+
+        if (is_array($this->config[$configKey]) && count($this->config[$configKey])) {
+            $stableBranchesRegex = array_map(function ($element) {
+                return '\(^[ ]*'.$element.'$\)';
+            }, $this->config[$configKey]);
+        }
 
         return implode('\|', $stableBranchesRegex);
     }
