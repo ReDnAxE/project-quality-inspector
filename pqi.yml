@@ -24,9 +24,9 @@ symfony:
     git-rule:
         config:
             stable-branches-regex:
-                - "origin/test1"
+                - "origin/master"
             ignored-branches-regex: ~ #TODO implements in code
-            too-old-stable-work-not-in-branch-threshold: "30" #in days
+            too-old-stable-work-not-in-branch-threshold: "20" #in days
             threshold-too-many-merged-branches: 1
 angularjs:
     config-files-exists-rule:
