@@ -118,12 +118,12 @@ config example:
 ```yaml
 mycustomconfig:
     git-rule:
-            config:
-                stable-branches-regex:
-                    - "origin/master"
-                ignored-branches-regex: ~ #TODO implements in code
-                too-old-stable-work-not-in-branch-threshold: "20" #in days
-                threshold-too-many-merged-branches: 0
+        config:
+            stable-branches-regex:
+                - "origin/master"
+            ignored-branches-regex: ~ #TODO implements in code
+            too-old-stable-work-not-in-branch-threshold: "20" #in days
+            threshold-too-many-merged-branches: 0
 ```
 
 TODO
@@ -134,4 +134,6 @@ TODO
 * composer-config-rule: disallow-wildcard-versioning > add current installed version in error message to facilitate explicit versioning correction
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
+* Add rule which expecting specific content in files
+* git-rule : To much no merged branches ?
 * Find more rules ;)

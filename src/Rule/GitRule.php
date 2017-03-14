@@ -43,12 +43,12 @@ class GitRule extends AbstractRule
 
         $notMergedBranchesInfo = $this->listMergedOrNotMergedBranches($stableBranches, false);
 
-        try {
-            foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
+        foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
+            try {
                 $this->expectsBranchNotTooBehind($notMergedBranchInfo, $stableBranches);
+            } catch (ExpectationFailedException $e) {
+                $expectationsFailedExceptions[] = $e;
             }
-        } catch (ExpectationFailedException $e) {
-            $expectationsFailedExceptions[] = $e;
         }
 
         if (count($expectationsFailedExceptions)) {
@@ -120,7 +120,7 @@ class GitRule extends AbstractRule
         $mergedOption = ($merged) ? '--merged' : '--no-merged';
 
         foreach ($stableBranches as $stableBranch) {
-            $result = ProcessHelper::execute(sprintf('for branch in `git branch -r %s %s | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
+            $result = ProcessHelper::execute(sprintf('for branch in `git branch -r %s %s | grep -v HEAD | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
 
             $branches[$stableBranch] = $result;
         }
@@ -254,8 +254,8 @@ class GitRule extends AbstractRule
     private function stringifyCommitArrays(array $commits)
     {
         $commits = array_map(function($commit) {
-            return sprintf('(%s - %s by %s)', $commit[4], $commit[2], $commit[3]);
+            return sprintf('%s - %s by %s', $commit[4], $commit[2], $commit[3]);
         }, $commits);
-        return implode(', ', $commits);
+        return "\n\t" . implode("\n\t", $commits);
     }
 }
