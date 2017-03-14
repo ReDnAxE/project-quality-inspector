@@ -92,15 +92,16 @@ class GitRule extends AbstractRule
     private function expectsBranchNotTooBehind(array $notMergedBranchInfo, array $stableBranches)
     {
         foreach ($stableBranches as $stableBranch) {
-            $stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
-
-            $interval = $this->getBranchesInfosDatesDiff($stableBranchFirstCommitInfo, $notMergedBranchInfo);
-
             $lrAheadCommitsCount = $this->getLeftRightAheadCommitsCountAfterMergeBase($stableBranch, $notMergedBranchInfo[4]);
 
-            if ($interval->format('a') >= (int)$this->config['too-old-stable-work-not-in-branch-threshold']) {
-                $message = sprintf('The branch %s is behind %s by %s commit(s), that contain more than %s days old work. %s should update the branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[0], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
-                throw new ExpectationFailedException($notMergedBranchInfo, $message);
+            if ($lrAheadCommitsCount[$stableBranch] > 0) {
+                $stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
+                $interval = $this->getBranchesInfosDatesDiff($notMergedBranchInfo, $stableBranchFirstCommitInfo);
+
+                if ((int)$interval->format('%r%a') >= (int)$this->config['too-old-stable-work-not-in-branch-threshold']) {
+                    $message = sprintf('The branch %s is behind %s by %s commit(s), that contain more than %s days old work. %s should update the branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[$stableBranch], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
+                    throw new ExpectationFailedException($notMergedBranchInfo, $message);
+                }
             }
         }
     }
@@ -163,6 +164,11 @@ class GitRule extends AbstractRule
         $result = ProcessHelper::execute(sprintf('git rev-list --left-right --count %s...%s', $branchLeft, $branchRight), $this->baseDir);
         $result = explode("\t", $result[0]);
 
+        $result = [
+            $branchLeft => $result[0],
+            $branchRight => $result[1]
+        ];
+
         return $result;
     }
 
@@ -187,13 +193,16 @@ class GitRule extends AbstractRule
      *
      * @param string $baseBranch
      * @param string $branch
-     * @return string
+     * @return array
      */
     private function getBranchFirstCommitInfo($baseBranch, $branch)
     {
+        $branchInfo = null;
         $result = ProcessHelper::execute(sprintf('git log --format="%s" %s..%s | tail -1', $this->commitFormat, $baseBranch, $branch), $this->baseDir);
-        $branchInfo = explode('|', $result[0]);
-        $branchInfo[] = $branch;
+        if (count($result)) {
+            $branchInfo = explode('|', $result[0]);
+            $branchInfo[] = $branch;
+        }
 
         return $branchInfo;
     }
