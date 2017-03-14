@@ -58,13 +58,16 @@ You can also add a ``common`` section, which will be always merged to the select
 ```yaml
 mycustomconfig:
     config-files-exists-rule:
-        - "appveyor.yml"
+        config:
+            - "appveyor.yml"
 mysecondcustomconfig:
     config-files-exists-rule:
-        - ".travis.yml"
+        config:
+            - ".travis.yml"
 common:
     config-files-exists-rule:
-        - ".gitignore.yml"
+        config:
+            - ".gitignore.yml"
 ```
 
 Rules
@@ -78,13 +81,14 @@ Here is a list of existing rules, and possible configurations :
 ```yaml
 mycustomconfig:
     config-files-exists-rule:
-        - "ruleset.xml"
-        - "app/phpunit.xml"
-        - "!web/app_*.php"
-        - "web/app.php"
-        - "tests/"
-        - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
-        - "composer.json"
+        config:
+            - "ruleset.xml"
+            - "app/phpunit.xml"
+            - "!web/app_*.php"
+            - "web/app.php"
+            - "tests/"
+            - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
+            - "composer.json"
 ```
 
 * composer-config-rule config example:
@@ -92,13 +96,14 @@ mycustomconfig:
 ```yaml
 mycustomconfig:
     composer-config-rule:
-        file: "composer.json"
-        disallow-wildcard-versioning: true
-        packages:
-            - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
-            - "phpunit-bridge"
-            - "bruli/php-git-hooks"
-            - "php-cs-fixer"
+        config:
+            file: "composer.json"
+            disallow-wildcard-versioning: true
+            packages:
+                - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
+                - "phpunit-bridge"
+                - "bruli/php-git-hooks"
+                - "php-cs-fixer"
 ```
 
 * git-rule
@@ -112,14 +117,13 @@ config example:
 
 ```yaml
 mycustomconfig:
-    composer-config-rule:
-        file: "composer.json"
-        disallow-wildcard-versioning: true
-        packages:
-            - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
-            - "phpunit-bridge"
-            - "bruli/php-git-hooks"
-            - "php-cs-fixer"
+    git-rule:
+            config:
+                stable-branches-regex:
+                    - "origin/master"
+                ignored-branches-regex: ~ #TODO implements in code
+                too-old-stable-work-not-in-branch-threshold: "20" #in days
+                threshold-too-many-merged-branches: 0
 ```
 
 TODO
@@ -132,5 +136,5 @@ TODO
 * [WIP] Rule git-rule :
   - set ignored branches
   - expects too old branches
-* Add CONTRIBUTING.md file to explain how to easily develop new rule
+* Add link to CONTRIBUTING.md file which explain how to easily develop new rule
 * Find more rules ;)
