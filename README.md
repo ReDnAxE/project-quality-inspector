@@ -28,7 +28,7 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.2.1
+composer require --dev rednaxe/project-quality-inspector ^1.2.2
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
