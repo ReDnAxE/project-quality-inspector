@@ -135,5 +135,6 @@ TODO
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
 * Add rule which expecting specific content in files
-* git-rule : To much no merged branches ?
+* Git-rule : To much no merged branches ?
+* Generate Junit.xml file
 * Find more rules ;)

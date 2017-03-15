@@ -81,7 +81,7 @@ class GitRule extends AbstractRule
     }
 
     /**
-     * Retrieve two first commits dates after common ancestor of the two branches, and expects there
+     * Compare stable branch first commit after common ancestor of not merged branch and stable branch, and expects days delay do not override limit
      *
      * @param array $notMergedBranchInfo
      * @param array $stableBranches
@@ -95,10 +95,11 @@ class GitRule extends AbstractRule
 
             if ($lrAheadCommitsCount[$stableBranch] > 0) {
                 $stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
-                $interval = $this->getBranchesInfosDatesDiff($notMergedBranchInfo, $stableBranchFirstCommitInfo);
+                $stableBranchLastCommitInfo = $this->getBranchLastCommitInfo($stableBranch);
+                $interval = $this->getBranchesInfosDatesDiff($stableBranchFirstCommitInfo, $stableBranchLastCommitInfo);
 
                 if ((int)$interval->format('%r%a') >= (int)$this->config['too-old-stable-work-not-in-branch-threshold']) {
-                    $message = sprintf('The branch %s is behind %s by %s commit(s), that contain more than %s days old work. %s should update the branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[$stableBranch], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
+                    $message = sprintf('The branch %s is behind %s by %s commit(s), that contains more than %s days old work. %s should update the branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[$stableBranch], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
                     throw new ExpectationFailedException($notMergedBranchInfo, $message);
                 }
             }
@@ -167,11 +168,14 @@ class GitRule extends AbstractRule
      */
     private function getMergeBaseCommit($branchLeft, $branchRight)
     {
+        $commitInfo = null;
         $result = ProcessHelper::execute(sprintf('git merge-base %s %s', $branchLeft, $branchRight), $this->baseDir);
-        print_r($result);
-        //TODO
 
-        return $result;
+        if (count($result)) {
+            $commitInfo = $this->getBranchLastCommitInfo($result[0]);
+        }
+
+        return $commitInfo;
     }
 
     /**
