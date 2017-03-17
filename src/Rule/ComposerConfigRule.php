@@ -77,7 +77,7 @@ class ComposerConfigRule extends AbstractRule
      */
     protected function expectsRequirementsHasNoWildCard($requirement, $version)
     {
-        $message = sprintf('Requirement "%s" should contains at least major explicit version. Version "%s" is not authorized', $requirement, $version);
+        $message = sprintf('Requirement <fg=green>"%s"</> should contains at least major explicit version. Version "%s" is not authorized', $requirement, $version);
 
         if (!preg_match('/\\d/', $version)) {
             throw new ExpectationFailedException($requirement, $message);
@@ -108,7 +108,7 @@ class ComposerConfigRule extends AbstractRule
      */
     protected function packageShouldExists($package, $requirements, $reason)
     {
-        $message = sprintf('Package "%s" should be installed', $package);
+        $message = sprintf('Package <fg=green>"%s"</> should be installed', $package);
 
         if (!key_exists($package, $requirements)) {
             throw new ExpectationFailedException($package, $message, $reason);
@@ -122,7 +122,7 @@ class ComposerConfigRule extends AbstractRule
      */
     protected function packageShouldNotExists($package, $requirements, $reason)
     {
-        $message = sprintf('Package "%s" should not be used', $package);
+        $message = sprintf('Package <fg=green>"%s"</> should not be used', $package);
 
         if (key_exists($package, $requirements)) {
             throw new ExpectationFailedException($package, $message, $reason);

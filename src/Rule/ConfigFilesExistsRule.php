@@ -80,7 +80,7 @@ class ConfigFilesExistsRule extends AbstractRule
      */
     private function globShouldFind($filePath, $reason)
     {
-        $message = sprintf('file "%s" should exists', $filePath);
+        $message = sprintf('file <fg=green>"%s"</> should exists', $filePath);
 
         if (!count(glob($filePath))) {
             throw new ExpectationFailedException($filePath, $message, $reason);
@@ -95,7 +95,7 @@ class ConfigFilesExistsRule extends AbstractRule
      */
     private function globShouldNotFind($filePath, $reason)
     {
-        $message = sprintf('file "%s" should not exists', $filePath);
+        $message = sprintf('file <fg=green>"%s"</> should not exists', $filePath);
 
         if (count(glob($filePath))) {
             throw new ExpectationFailedException($filePath, $message, $reason);

@@ -20,13 +20,14 @@ symfony:
                 - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
                 - "phpunit-bridge"
                 - "bruli/php-git-hooks"
-                - "php-cs-fixer"
     git-rule:
         config:
             stable-branches-regex:
+                - "origin/\d.\d.\d"
                 - "origin/master"
-            ignored-branches-regex: ~ #TODO check if it works
-            too-old-stable-work-not-in-branch-threshold: "5" #in days
+            ignored-branches-regex: ~
+            threshold-days-behind: "20" #in days
+            threshold-commits-behind: "50"
             threshold-too-many-merged-branches: 5
 angularjs:
     config-files-exists-rule:

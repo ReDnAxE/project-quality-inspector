@@ -91,15 +91,25 @@ class GitRule extends AbstractRule
     private function expectsBranchNotTooBehind(array $notMergedBranchInfo, array $stableBranches)
     {
         foreach ($stableBranches as $stableBranch) {
+            $failed = false;
             $lrAheadCommitsCount = $this->getLeftRightAheadCommitsCountAfterMergeBase($stableBranch, $notMergedBranchInfo[4]);
 
             if ($lrAheadCommitsCount[$stableBranch] > 0) {
-                $stableBranchFirstCommitInfo = $this->getBranchFirstCommitInfo($notMergedBranchInfo[4], $stableBranch);
+                $commonAncestorCommitInfo = $this->getMergeBaseCommit($notMergedBranchInfo[4], $stableBranch);
                 $stableBranchLastCommitInfo = $this->getBranchLastCommitInfo($stableBranch);
-                $interval = $this->getBranchesInfosDatesDiff($stableBranchFirstCommitInfo, $stableBranchLastCommitInfo);
 
-                if ((int)$interval->format('%r%a') >= (int)$this->config['too-old-stable-work-not-in-branch-threshold']) {
-                    $message = sprintf('The branch %s is behind %s by %s commit(s), that contains more than %s days old work. %s should update the branch %s', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[$stableBranch], $this->config['too-old-stable-work-not-in-branch-threshold'], $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
+                if ($lrAheadCommitsCount[$stableBranch] >= (int)$this->config['threshold-commits-behind']) {
+                    $failed = true;
+                }
+
+                $interval = $this->getCommitInfosDatesDiff($commonAncestorCommitInfo, $stableBranchLastCommitInfo);
+                if ((int)$interval->format('%r%a') >= (int)$this->config['threshold-days-behind']) {
+                    $failed = true;
+                }
+
+                if ($failed) {
+                    $message = sprintf('The branch <fg=green>%s</> is behind <fg=green>%s</> by %s commits spread through %s days.', $notMergedBranchInfo[4], $stableBranch, $lrAheadCommitsCount[$stableBranch], (int)$interval->format('%r%a'));
+                    $message .= sprintf(' <fg=green>%s</> should update the branch %s', $notMergedBranchInfo[3], $notMergedBranchInfo[4]);
                     throw new ExpectationFailedException($notMergedBranchInfo, $message);
                 }
             }
@@ -202,9 +212,9 @@ class GitRule extends AbstractRule
      * @param $branchInfoRight
      * @return bool|\DateInterval
      */
-    private function getBranchesInfosDatesDiff($branchInfoLeft, $branchInfoRight)
+    private function getCommitInfosDatesDiff($branchInfoLeft, $branchInfoRight)
     {
-        $format = 'Y-m-!d H:i:s O';
+        $format = 'Y-m-d H:i:s O';
         $dateLeft = \DateTime::createFromFormat($format, $branchInfoLeft[1]);
         $dateRight = \DateTime::createFromFormat($format, $branchInfoRight[1]);
 
@@ -213,7 +223,7 @@ class GitRule extends AbstractRule
 
     /**
      * @param $branch
-     * @return string
+     * @return array
      */
     private function getBranchLastCommitInfo($branch)
     {
@@ -240,15 +250,15 @@ class GitRule extends AbstractRule
      */
     private function getBranchesRegex($configKey)
     {
-        $stableBranchesRegex = ['^$'];
+        $branchesRegex = ['^$'];
 
         if (is_array($this->config[$configKey]) && count($this->config[$configKey])) {
-            $stableBranchesRegex = array_map(function ($element) {
+            $branchesRegex = array_map(function ($element) {
                 return '\(^[ ]*'.$element.'$\)';
             }, $this->config[$configKey]);
         }
 
-        return implode('\|', $stableBranchesRegex);
+        return implode('\|', $branchesRegex);
     }
 
     /**
