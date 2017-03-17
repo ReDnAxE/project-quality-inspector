@@ -109,9 +109,10 @@ mycustomconfig:
 * git-rule
 
 When we have more git branches than developers in a project, it's sometimes difficult to avoid merge conflicts. Then when it's time to build a package, it's generally too late to rebase, merge or clean each branch individually.
-In order to prevent conflicts risks, this rule helps you to detects :
+In order to prevent any risk of unnecessary conflicts, this rule helps you to detects :
 - large number of already merged branches (and suggests you to delete thoses branches)
-- branches that should be updated by at least 30 days old work from stable branches
+- branches that should be updated because there is too much new commits in stable branch
+- branches that should be updated because there is too days of work in stable branch
 
 config example:
 
@@ -120,10 +121,12 @@ mycustomconfig:
     git-rule:
         config:
             stable-branches-regex:
+                - "origin/\d.\d.\d"
                 - "origin/master"
-            ignored-branches-regex: ~ #TODO implements in code
-            too-old-stable-work-not-in-branch-threshold: "20" #in days
-            threshold-too-many-merged-branches: 0
+            ignored-branches-regex: ~
+            threshold-days-behind: "20" #in days
+            threshold-commits-behind: "50"
+            threshold-too-many-merged-branches: 5
 ```
 
 TODO
@@ -135,6 +138,5 @@ TODO
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
 * Add rule which expecting specific content in files
-* Git-rule : To much no merged branches ?
 * Generate Junit.xml file
 * Find more rules ;)
