@@ -1,16 +1,16 @@
 symfony:
-    config-files-exists-rule:
+    files-rule:
         config:
             - "ruleset.xml"
             - "app/phpunit.xml"
             - "!web/app_*.php"
-            - "web/app.php"
+            - { value: "web/app.php", grep: [ "getenv", "SYMFONY_ENV", "!$_ENV" ], reason: "This file is required and must use getenv php function to retrieve SYMFONY_ENV environment variable" }
             - { value: "app/phpunit.xml", reason: "This file is required for testing code" }
             - "composer.json"
             - "phpcs.xml"
             - "phpmd.xml"
             - "php-git-hooks.yml"
-            - "README.md"
+            - { value: "README.md", grep: "!Symfony Standard Edition" }
             - "tests/"
     composer-config-rule:
         config:
@@ -30,11 +30,11 @@ symfony:
             threshold-commits-behind: "50"
             threshold-too-many-merged-branches: 5
 angularjs:
-    config-files-exists-rule:
+    files-rule:
         config:
             - "package.json"
             - ".eslintrc"
 common:
-    config-files-exists-rule:
+    files-rule:
         config:
             - ".gitignore"

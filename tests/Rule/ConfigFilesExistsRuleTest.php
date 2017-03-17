@@ -12,14 +12,14 @@ namespace ProjectQualityInspector\Rule;
 
 use PHPUnit\Framework\TestCase;
 
-class ConfigFilesExistsRuleTest extends TestCase
+class FilesRuleTest extends TestCase
 {
     /**
-     * @covers  \ProjectQualityInspector\Rule\ConfigFilesExistsRule::getGroups
+     * @covers  \ProjectQualityInspector\Rule\FilesRule::getGroups
      */
     public function testGetGroups()
     {
-        $groups = ConfigFilesExistsRule::getGroups();
+        $groups = FilesRule::getGroups();
         $this->assertInternalType('array', $groups);
         $this->assertEquals($groups, ['config']);
     }

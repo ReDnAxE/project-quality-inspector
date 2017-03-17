@@ -12,7 +12,7 @@ namespace ProjectQualityInspector\Loader;
 
 use ProjectQualityInspector\Iterator\RuleFilterIterator;
 use ProjectQualityInspector\Rule\ComposerConfigRule;
-use ProjectQualityInspector\Rule\ConfigFilesExistsRule;
+use ProjectQualityInspector\Rule\FilesRule;
 use ProjectQualityInspector\Rule\GitRule;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
@@ -70,7 +70,7 @@ class RulesLoader
         }
 
         try {
-            $configs = Yaml::parse(file_get_contents($configFile));
+            $configs = Yaml::parse(file_get_contents($configFile)); //TODO: change this deprecated method call
         } catch (ParseException $e) {
             throw new \InvalidArgumentException(sprintf("unable to parse the YAML string in file %s: %s", $configFile, $e->getMessage()));
         }
@@ -84,7 +84,7 @@ class RulesLoader
     protected function getExistingRules()
     {
         return [
-            call_user_func(ConfigFilesExistsRule::class . '::getRuleName') => ConfigFilesExistsRule::class,
+            call_user_func(FilesRule::class . '::getRuleName') => FilesRule::class,
             call_user_func(ComposerConfigRule::class . '::getRuleName') => ComposerConfigRule::class,
             call_user_func(GitRule::class . '::getRuleName') => GitRule::class,
         ];

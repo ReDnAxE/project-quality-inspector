@@ -28,7 +28,7 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.2.3
+composer require --dev rednaxe/project-quality-inspector ^1.2.4
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
@@ -57,15 +57,15 @@ $ ./bin/pqi mycustomconfig -c config/pqi.yml -b Back/src
 You can also add a ``common`` section, which will be always merged to the selected section :
 ```yaml
 mycustomconfig:
-    config-files-exists-rule:
+    files-rule:
         config:
             - "appveyor.yml"
 mysecondcustomconfig:
-    config-files-exists-rule:
+    files-rule:
         config:
             - ".travis.yml"
 common:
-    config-files-exists-rule:
+    files-rule:
         config:
             - ".gitignore.yml"
 ```
@@ -76,19 +76,23 @@ Rules
 A rule is loaded when the rule key is present in configuration.
 Here is a list of existing rules, and possible configurations :
 
-* config-files-exists-rule config example:
+* files-rule config example:
 
 ```yaml
 mycustomconfig:
-    config-files-exists-rule:
+    files-rule:
         config:
             - "ruleset.xml"
             - "app/phpunit.xml"
             - "!web/app_*.php"
-            - "web/app.php"
-            - "tests/"
-            - { filename: "app/phpunit.xml", reason: "This file is required for testing code" }
+            - { value: "web/app.php", grep: [ "getenv", "SYMFONY_ENV", "!$_ENV" ], reason: "This file is required and must use getenv php function to retrieve SYMFONY_ENV environment variable" }
+            - { value: "app/phpunit.xml", reason: "This file is required for testing code" }
             - "composer.json"
+            - "phpcs.xml"
+            - "phpmd.xml"
+            - "php-git-hooks.yml"
+            - { value: "README.md", grep: "!Symfony Standard Edition" }
+            - "tests/"
 ```
 
 * composer-config-rule config example:
