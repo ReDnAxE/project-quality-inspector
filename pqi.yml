@@ -23,7 +23,7 @@ symfony:
     git-rule:
         config:
             stable-branches-regex:
-                - "origin/\d.\d.\d"
+                - "origin/\\d.\\d.\\d"
                 - "origin/master"
             ignored-branches-regex: ~
             threshold-days-behind: "20" #in days
