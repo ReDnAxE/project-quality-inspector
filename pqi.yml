@@ -18,7 +18,7 @@ symfony:
             disallow-wildcard-versioning: true
             packages:
                 - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
-                - "phpunit-bridge"
+                - "symfony/phpunit-bridge"
                 - "bruli/php-git-hooks"
     git-rule:
         config:

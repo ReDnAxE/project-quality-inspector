@@ -139,8 +139,10 @@ TODO
 * Creating PHP Archive [PHP Archive (PHAR)](https://php.net/phar)
 * Tests
 * composer-config-rule: disallow-wildcard-versioning > add current installed version in error message to facilitate explicit versioning correction
+* composer-config-rule: check if there is a lot of updates to do, and if there is outdated packages installed
+* git-rule : complete merged branches with date of merge and from who
+* file-rule : allow to grep into a folder
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
-* Add rule which expecting specific content in files
 * Generate Junit.xml file
 * Find more rules ;)
