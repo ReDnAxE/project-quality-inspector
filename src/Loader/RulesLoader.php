@@ -51,7 +51,7 @@ class RulesLoader
 
         $rules = new \ArrayIterator();
         foreach ($config as $ruleName => $ruleConfig) {
-            if (key_exists($ruleName, $existingRules)) {
+            if (key_exists($ruleName, $existingRules)) { //TODO delete existingRules, and try to instanciate class with sanitize names in CamelCases
                 $rules[] = new $existingRules[$ruleName]($ruleConfig['config'], $baseDir);
             }
         }

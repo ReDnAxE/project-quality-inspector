@@ -27,6 +27,7 @@
   },
   "require": {
     "php": "^5.6 || ^7.0",
+    "ext-dom": "*",
     "symfony/console": "~2.7 || ~3.0",
     "symfony/yaml": "~2.7 || ~3.0"
   },

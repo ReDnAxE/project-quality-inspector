@@ -11,6 +11,7 @@
 namespace ProjectQualityInspector\Rule;
 
 use ProjectQualityInspector\Exception\RuleViolationException;
+use ProjectQualityInspector\Exception\ExpectationFailedException;
 
 /**
  * Class AbstractRule
@@ -28,6 +29,11 @@ abstract class AbstractRule implements RuleInterface
      * @var string
      */
     protected $baseDir;
+
+    /**
+     * @var array
+     */
+    protected $assertions = [];
 
     /**
      * @inheritdoc
@@ -68,6 +74,14 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
+     * @return array
+     */
+    public function getAssertions()
+    {
+        return $this->assertions;
+    }
+
+    /**
      * @param array|string $raw
      * @return array|string
      */
@@ -101,5 +115,29 @@ abstract class AbstractRule implements RuleInterface
     protected function throwRuleViolationException(array $expectationFailedExceptions)
     {
         throw new RuleViolationException($this, $expectationFailedExceptions);
+    }
+
+    /**
+     * @param string  $name
+     * @param array  $failure
+     * @param integer $assertions
+     * @param integer $time
+     * @param array  $error
+     */
+    protected function addAssertion($name, array $failures = [], $assertions = 1, $time = 0, array $errors = [])
+    {
+        $this->assertions[] = [
+            'name' => $name,
+            'assertions' => $assertions,
+            'time' => $time,
+            'failures' => [
+                'sum' => count($failures),
+                'list' => ((count($failures)) ? [['message' => $failures[0]['message'], 'type' => $failures[0]['type']]] : []) //TODO all failures
+            ],
+            'errors' => [
+                'sum' => count($errors),
+                'list' => ((count($error)) ? [['message' => $errors[0]['message'], 'type' => $errors[0]['type']]] : []) //TODO all errors
+            ],
+        ];
     }
 }

@@ -11,7 +11,6 @@
 namespace ProjectQualityInspector\Exception;
 
 use ProjectQualityInspector\Rule\RuleInterface;
-use Exception;
 
 /**
  * Class ExpectationFailedException
@@ -40,7 +39,7 @@ class ExpectationFailedException extends \RuntimeException
      * @param int $code
      * @param Exception|null $previous
      */
-    public function __construct($subject, $message, $reason = "", $code = 0, Exception $previous = null)
+    public function __construct($subject, $message, $reason = "", $code = 0, \Exception $previous = null)
     {
         parent::__construct($message, $code, $previous);
 

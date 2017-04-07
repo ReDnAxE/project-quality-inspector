@@ -10,7 +10,8 @@
 
 namespace ProjectQualityInspector\Command;
 
-use ProjectQualityInspector\Application\UIHelper;
+use ProjectQualityInspector\Application\Output\UIHelper;
+use ProjectQualityInspector\Application\Output\JunitHelper;
 use ProjectQualityInspector\Exception\RuleViolationException;
 use ProjectQualityInspector\Loader\RulesLoader;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +19,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
 
 /**
  * Main command
@@ -34,7 +34,8 @@ class MainCommand extends Command
             ->setDescription('The Project quality tool')
             ->addArgument('applicationType', InputArgument::REQUIRED, 'The application type (symfony or angularjs, etc...)')
             ->addOption('baseDir', '-b', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
-            ->addOption('configFile', '-c', InputOption::VALUE_REQUIRED, 'Change the base directory of application');
+            ->addOption('configFile', '-c', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
+            ->addOption('junitFile', '-j', InputOption::VALUE_REQUIRED, 'Generate a JUnit file');
     }
 
     /**
@@ -48,7 +49,10 @@ class MainCommand extends Command
 
         $applicationType = $input->getArgument('applicationType');
         $baseDir = $this->resolveBaseDirOption($input);
-        $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->getConfigFile();
+        //TODO: check if absolute baseDir
+        $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->findConfigFile();
+        //TODO: check if absolute baseDir
+        $junitFile = $input->getOption('junitFile') ? getcwd() . '/' . $input->getOption('junitFile') : null;
 
         $rulesLoader = new RulesLoader();
 
@@ -74,13 +78,17 @@ class MainCommand extends Command
             }
         }
 
+        if ($junitFile) {
+            JunitHelper::generateJunitFile($rules, $junitFile);
+        }
+
         return $exitCode;
     }
 
     /**
      * @return string
      */
-    protected function getConfigFile()
+    protected function findConfigFile()
     {
         $configsToSearch = [
             getcwd() . '/pqi.yml',
@@ -95,7 +103,8 @@ class MainCommand extends Command
      * @return string
      */
     protected function resolveBaseDirOption(InputInterface $input)
-    {
+    { 
+        //TODO: check if absolute baseDir
         $baseDir = $input->getOption('baseDir') ? getcwd() . DIRECTORY_SEPARATOR . $input->getOption('baseDir') : getcwd();
 
         return $baseDir;

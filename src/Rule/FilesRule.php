@@ -38,8 +38,10 @@ class FilesRule extends AbstractRule
                 if (isset($fileConf['grep']) && count($files)) {
                     $this->expectsFilesGrep($files, $fileConf['grep'], $this->getReason($fileConf));
                 }
+                $this->addAssertion($this->getValue($fileConf));
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
+                $this->addAssertion($this->getValue($fileConf), [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsFilesGlobExists|expectsFilesGrep']]);
             }
         }
 

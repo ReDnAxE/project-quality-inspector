@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace ProjectQualityInspector\Application;
+namespace ProjectQualityInspector\Application\Output;
 
 use ProjectQualityInspector\Exception\RuleViolationException;
 use ProjectQualityInspector\Rule\RuleInterface;

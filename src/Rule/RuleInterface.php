@@ -37,6 +37,11 @@ interface RuleInterface
     /**
      * @return array
      */
+    public function getAssertions();
+
+    /**
+     * @return array
+     */
     public function getConfig();
 
     /**

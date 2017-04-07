@@ -37,8 +37,10 @@ class GitRule extends AbstractRule
 
         try {
             $this->expectsNoMergedBranches($stableBranches, $this->config['threshold-too-many-merged-branches']);
+            $this->addAssertion('expectsNoMergedBranches');
         } catch (ExpectationFailedException $e) {
             $expectationsFailedExceptions[] = $e;
+            $this->addAssertion('expectsNoMergedBranches', [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsNoMergedBranches']]);
         }
 
         $notMergedBranchesInfo = $this->listMergedOrNotMergedBranches($stableBranches, false);
@@ -46,8 +48,10 @@ class GitRule extends AbstractRule
         foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
             try {
                 $this->expectsBranchNotTooBehind($notMergedBranchInfo, $stableBranches);
+                $this->addAssertion($notMergedBranchInfo[4]);
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
+                $this->addAssertion($notMergedBranchInfo[4], [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsBranchNotTooBehind']]);
             }
         }
 

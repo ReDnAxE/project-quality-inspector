@@ -40,9 +40,11 @@ class ComposerConfigRule extends AbstractRule
         foreach ($this->config['packages'] as $package) {
             try {
                 $this->expectsPackagePresence($package, $requirements);
+                $this->addAssertion($this->getValue($package));
 
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
+                $this->addAssertion($this->getValue($package), [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsPackagePresence']]);
             }
         }
 
