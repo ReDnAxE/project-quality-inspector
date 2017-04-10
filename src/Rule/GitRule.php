@@ -140,7 +140,6 @@ class GitRule extends AbstractRule
             $branches[$stableBranch] = $this->explodeCommitsArrays($result);
             if ($merged) {
                 foreach ($branches[$stableBranch] as $branchHash => $mergedBranchCommit) {
-                    //TODO: check fast forward merges
                     $branches[$stableBranch][$branchHash]['mergeCommit'] = $this->getMergeCommitInfo($stableBranch, $mergedBranchCommit['branchName']);
                 }
             }
@@ -249,9 +248,14 @@ class GitRule extends AbstractRule
      */
     private function getMergeCommitInfo($baseBranch, $mergedBranch)
     {
-        $result = ProcessHelper::execute(sprintf('git show --format="%s" %s ^%s --ancestry-path | head -n 1', $this->commitFormat, $baseBranch, $mergedBranch), $this->baseDir);
-        $explodedCommit = explode('|', $result[0]);
-        $branchInfo = array_combine(array_slice($this->commitFormatKeys, 0, count($explodedCommit)), $explodedCommit);
+        $branchInfo = [
+            'authorName' => 'fast-forward'
+        ];
+
+        if ($result = ProcessHelper::execute(sprintf('git show --format="%s" %s ^%s --ancestry-path | head -n 1', $this->commitFormat, $baseBranch, $mergedBranch), $this->baseDir)) {
+            $explodedCommit = explode('|', $result[0]);
+            $branchInfo = array_combine(array_slice($this->commitFormatKeys, 0, count($explodedCommit)), $explodedCommit);
+        }
         $branchInfo['branchName'] = $baseBranch;
 
         return $branchInfo;
@@ -291,7 +295,9 @@ class GitRule extends AbstractRule
     private function stringifyMergedBranches(array $mergedBranches)
     {
         $mergedBranches = array_map(function($mergedBranch) {
-            return sprintf('<fg=green>%s</> - %s by %s, merged %s in <fg=green>%s</> by %s', $mergedBranch['branchName'], $mergedBranch['relativeCommitterDate'], $mergedBranch['authorName'], $mergedBranch['mergeCommit']['relativeCommitterDate'], $mergedBranch['mergeCommit']['branchName'], $mergedBranch['mergeCommit']['authorName']);
+            return ($mergedBranch['mergeCommit']['authorName'] == 'fast-forward')
+                ? sprintf('<fg=green>%s</> - %s by %s, merged in <fg=green>%s</> by %s', $mergedBranch['branchName'], $mergedBranch['relativeCommitterDate'], $mergedBranch['authorName'], $mergedBranch['mergeCommit']['branchName'], $mergedBranch['mergeCommit']['authorName'])
+                : sprintf('<fg=green>%s</> - %s by %s, merged %s in <fg=green>%s</> by %s', $mergedBranch['branchName'], $mergedBranch['relativeCommitterDate'], $mergedBranch['authorName'], $mergedBranch['mergeCommit']['relativeCommitterDate'], $mergedBranch['mergeCommit']['branchName'], $mergedBranch['mergeCommit']['authorName']);
         }, $mergedBranches);
         return "\n\t" . implode("\n\t", $mergedBranches);
     }
