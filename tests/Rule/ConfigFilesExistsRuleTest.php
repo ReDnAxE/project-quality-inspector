@@ -21,6 +21,6 @@ class FilesRuleTest extends TestCase
     {
         $groups = FilesRule::getGroups();
         $this->assertInternalType('array', $groups);
-        $this->assertEquals($groups, ['config']);
+        $this->assertEquals($groups, ['files']);
     }
 }
