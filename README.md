@@ -144,5 +144,4 @@ TODO
 * file-rule : allow to grep into a folder
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
-* Generate Junit.xml file
 * Find more rules ;)

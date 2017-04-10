@@ -79,7 +79,7 @@ class GitRule extends AbstractRule
     {
         if ($mergedBranches = $this->listMergedOrNotMergedBranches($stableBranches, true)) {
             if (count($mergedBranches) >= $threshold) {
-                $message = sprintf('there is too much remaining merged branches (%s) : %s', count($mergedBranches), $this->stringifyCommitArrays($mergedBranches));
+                $message = sprintf('there is too much remaining merged branches (%s) : %s', count($mergedBranches), $this->stringifyMergedBranches($mergedBranches));
                 throw new ExpectationFailedException($mergedBranches, $message);
             }
         }
@@ -107,7 +107,7 @@ class GitRule extends AbstractRule
                     $failed = true;
                 }
 
-                $interval = $this->getCommitInfosDatesDiff($commonAncestorCommitInfo, $stableBranchLastCommitInfo);
+                $interval = $this->compareCommitInfosDatesDiff($commonAncestorCommitInfo, $stableBranchLastCommitInfo);
                 if ((int)$interval->format('%r%a') >= (int)$this->config['threshold-days-behind']) {
                     $failed = true;
                 }
@@ -139,11 +139,10 @@ class GitRule extends AbstractRule
             $result = ProcessHelper::execute(sprintf('for branch in `git branch -r %s %s | grep -v HEAD | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
             $branches[$stableBranch] = $this->explodeCommitsArrays($result);
             if ($merged) {
-                /*foreach ($branches[$stableBranch] as $branchHash => $mergedBranchCommit) {
-                    //TODO: get stableBranch getBranchFirstCommitInfo
-                    //$branches[$stableBranch][$branchHash]['mergeCommit'] = $this->getBranchFirstCommitInfo($mergedBranchCommit['branchName'], $stableBranch);
+                foreach ($branches[$stableBranch] as $branchHash => $mergedBranchCommit) {
+                    //TODO: check fast forward merges
+                    $branches[$stableBranch][$branchHash]['mergeCommit'] = $this->getMergeCommitInfo($stableBranch, $mergedBranchCommit['branchName']);
                 }
-                print_r($branches);*/
             }
         }
 
@@ -209,7 +208,7 @@ class GitRule extends AbstractRule
         if (count($result)) {
             $explodedCommit = explode('|', $result[0]);
             $branchInfo = array_combine(array_slice($this->commitFormatKeys, 0, count($explodedCommit)), $explodedCommit);
-            $branchInfo[] = $branch;
+            $branchInfo['branchName'] = $branch;
         }
 
         return $branchInfo;
@@ -220,7 +219,7 @@ class GitRule extends AbstractRule
      * @param $branchInfoRight
      * @return bool|\DateInterval
      */
-    private function getCommitInfosDatesDiff($branchInfoLeft, $branchInfoRight)
+    private function compareCommitInfosDatesDiff($branchInfoLeft, $branchInfoRight)
     {
         $format = 'Y-m-d H:i:s O';
         $dateLeft = \DateTime::createFromFormat($format, $branchInfoLeft['committerDate']);
@@ -238,7 +237,22 @@ class GitRule extends AbstractRule
         $result = ProcessHelper::execute(sprintf('git show --format="%s" %s | head -n 1', $this->commitFormat, $branch), $this->baseDir);
         $explodedCommit = explode('|', $result[0]);
         $branchInfo = array_combine(array_slice($this->commitFormatKeys, 0, count($explodedCommit)), $explodedCommit);
-        $branchInfo[] = $branch;
+        $branchInfo['branchName'] = $branch;
+
+        return $branchInfo;
+    }
+
+    /**
+     * @param $baseBranch
+     * @param $mergedBranch
+     * @return array
+     */
+    private function getMergeCommitInfo($baseBranch, $mergedBranch)
+    {
+        $result = ProcessHelper::execute(sprintf('git show --format="%s" %s ^%s --ancestry-path | head -n 1', $this->commitFormat, $baseBranch, $mergedBranch), $this->baseDir);
+        $explodedCommit = explode('|', $result[0]);
+        $branchInfo = array_combine(array_slice($this->commitFormatKeys, 0, count($explodedCommit)), $explodedCommit);
+        $branchInfo['branchName'] = $baseBranch;
 
         return $branchInfo;
     }
@@ -274,12 +288,12 @@ class GitRule extends AbstractRule
      * @param array $commits
      * @return string
      */
-    private function stringifyCommitArrays(array $commits)
+    private function stringifyMergedBranches(array $mergedBranches)
     {
-        $commits = array_map(function($commit) {
-            return sprintf('%s - %s by %s', $commit['branchName'], $commit['relativeCommitterDate'], $commit['authorName']);
-        }, $commits);
-        return "\n\t" . implode("\n\t", $commits);
+        $mergedBranches = array_map(function($mergedBranch) {
+            return sprintf('<fg=green>%s</> - %s by %s, merged %s in <fg=green>%s</> by %s', $mergedBranch['branchName'], $mergedBranch['relativeCommitterDate'], $mergedBranch['authorName'], $mergedBranch['mergeCommit']['relativeCommitterDate'], $mergedBranch['mergeCommit']['branchName'], $mergedBranch['mergeCommit']['authorName']);
+        }, $mergedBranches);
+        return "\n\t" . implode("\n\t", $mergedBranches);
     }
 
     /**
