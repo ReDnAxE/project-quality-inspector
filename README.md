@@ -28,7 +28,7 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.2.4
+composer require --dev rednaxe/project-quality-inspector ^1.2.5
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
@@ -52,6 +52,11 @@ $ ./bin/pqi run mycustomconfig
 You can use ``-c`` or ``--configFile``, and ``-b`` or ``--baseDir`` options to respectively change the configuration file, and the inspection base directory :
 ```bash
 $ ./bin/pqi mycustomconfig -c config/pqi.yml -b Back/src
+```
+
+You can use ``-j`` or ``--junitFile`` to generate a JUnit file :
+```bash
+$ ./bin/pqi mycustomconfig -j pqi-junit.xml
 ```
 
 You can also add a ``common`` section, which will be always merged to the selected section :
@@ -125,7 +130,7 @@ mycustomconfig:
     git-rule:
         config:
             stable-branches-regex:
-                - "origin/\d.\d.\d"
+                - "origin/\\d\\+.\\d\\+.\\d\\+"
                 - "origin/master"
             ignored-branches-regex: ~
             threshold-days-behind: "20" #in days
@@ -142,6 +147,7 @@ TODO
 * composer-config-rule: check if there is a lot of updates to do, and if there is outdated packages installed
 * git-rule : complete merged branches with date of merge and from who
 * file-rule : allow to grep into a folder
+* add time in jUnit generated file content
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule
 * Find more rules ;)
