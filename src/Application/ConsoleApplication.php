@@ -21,9 +21,9 @@ class ConsoleApplication
 {
     public static function main()
     {
-        $command = new static;
+        $console = new static;
 
-        return $command->run();
+        return $console->run();
     }
 
     /**
@@ -31,11 +31,21 @@ class ConsoleApplication
      */
     public function run()
     {
+        $application = $this->getApplication();
+
+        return $application->run();
+    }
+
+    /**
+     * @return Application
+     */
+    public function getApplication()
+    {
         $application = new Application('pqi', '1.3.0');
         $command = new MainCommand();
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);
 
-        return $application->run();
+        return $application;
     }
 }

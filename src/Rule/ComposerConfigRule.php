@@ -64,14 +64,6 @@ class ComposerConfigRule extends AbstractRule
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function getGroups()
-    {
-        return array_merge(parent::getGroups(), ['config']);
-    }
-
-    /**
      * @param string $requirement
      * @param string $version
      *

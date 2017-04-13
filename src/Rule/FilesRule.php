@@ -51,14 +51,6 @@ class FilesRule extends AbstractRule
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function getGroups()
-    {
-        return array_merge(parent::getGroups(), ['files']);
-    }
-
-    /**
      * @param $fileConf
      * @param $baseDir
      * @return array

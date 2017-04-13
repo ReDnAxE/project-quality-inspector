@@ -33,6 +33,7 @@ class MainCommand extends Command
         $this->setName('run')
             ->setDescription('The Project quality tool')
             ->addArgument('applicationType', InputArgument::REQUIRED, 'The application type (symfony or angularjs, etc...)')
+            ->addOption('rules', '-r', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'select rules to load')
             ->addOption('baseDir', '-b', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
             ->addOption('configFile', '-c', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
             ->addOption('junitFile', '-j', InputOption::VALUE_REQUIRED, 'Generate a JUnit file');
@@ -49,6 +50,7 @@ class MainCommand extends Command
 
         $applicationType = $input->getArgument('applicationType');
         $baseDir = $this->resolveBaseDirOption($input);
+
         //TODO: check if absolute baseDir
         $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->findConfigFile();
         //TODO: check if absolute baseDir
@@ -57,7 +59,7 @@ class MainCommand extends Command
         $rulesLoader = new RulesLoader();
 
         try {
-            $rules = $rulesLoader->load($configFile, $applicationType, $baseDir);
+            $rules = $rulesLoader->load($configFile, $applicationType, $baseDir, $input->getOption('rules'));
         } catch (\InvalidArgumentException $e) {
             UIHelper::displayException($e, $output);
 

@@ -17,16 +17,27 @@ namespace ProjectQualityInspector\Iterator;
  */
 class RuleFilterIterator extends \FilterIterator
 {
-    private $groups;
+    /**
+     * @var array
+     */
+    private $ruleNames;
 
-    public function __construct(\Iterator $iterator , $groups)
+    /**
+     * @param Iterator $iterator
+     * @param array   $ruleNames
+     */
+    public function __construct(\Iterator $iterator , array $ruleNames = [])
     {
         parent::__construct($iterator);
-        $this->groups = $groups;
+        $this->ruleNames = $ruleNames;
     }
 
     public function accept()
     {
+        if (count($this->ruleNames)) {
+            $current = $this->getInnerIterator()->current();
+            return in_array($current::getRuleName(), $this->ruleNames);
+        }
         /*$user = $this->getInnerIterator()->current();
         if( strcasecmp($user['name'],$this->groups) == 0) {
             return false;

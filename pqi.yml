@@ -22,6 +22,7 @@ symfony:
                 - "bruli/php-git-hooks"
     git-rule:
         config:
+            remote-branches: true
             stable-branches-regex:
                 - "origin/\\d\\+.\\d\\+.\\d\\+"
                 - "origin/master"

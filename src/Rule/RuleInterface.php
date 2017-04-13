@@ -45,11 +45,6 @@ interface RuleInterface
     public function getConfig();
 
     /**
-     * @return array
-     */
-    public static function getGroups();
-
-    /**
      * @return string
      */
     public static function getRuleName();

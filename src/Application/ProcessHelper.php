@@ -30,7 +30,7 @@ class ProcessHelper
         }
         exec($command, $output, $returnValue);
         if ($returnValue !== 0 && !$allowErrorExitCode) {
-            throw new \RuntimeException(implode("\r\n", $output));
+            throw new \RuntimeException(sprintf('ProcessHelper command : %s. Output: %s', $command, implode("\r\n", $output)));
         }
         return $output;
     }

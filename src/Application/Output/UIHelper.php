@@ -56,6 +56,6 @@ class UIHelper
      */
     public static function displayException(\Exception $e, OutputInterface $output)
     {
-        $output->writeln(sprintf('<error>Error: %s</error>', $e->getMessage()));
+        $output->writeln(sprintf('<error>Error: %s : %s::%s</error>', $e->getMessage(), $e->getFile(), $e->getLine()));
     }
 }

@@ -34,17 +34,17 @@ class GitRule extends AbstractRule
     public function evaluate()
     {
         $expectationsFailedExceptions = [];
-        $stableBranches = $this->getStableBranches();
+        $stableBranches = $this->getStableBranches($this->config['remote-branches']);
 
         try {
-            $this->expectsNoMergedBranches($stableBranches, $this->config['threshold-too-many-merged-branches']);
+            $this->expectsNoMergedBranches($stableBranches, $this->config['threshold-too-many-merged-branches'], $this->config['remote-branches']);
             $this->addAssertion('expectsNoMergedBranches');
         } catch (ExpectationFailedException $e) {
             $expectationsFailedExceptions[] = $e;
             $this->addAssertion('expectsNoMergedBranches', [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsNoMergedBranches']]);
         }
 
-        $notMergedBranchesInfo = $this->listMergedOrNotMergedBranches($stableBranches, false);
+        $notMergedBranchesInfo = $this->listMergedOrNotMergedBranches($stableBranches, false, $this->config['remote-branches']);
 
         foreach ($notMergedBranchesInfo as $notMergedBranchInfo) {
             try {
@@ -62,22 +62,15 @@ class GitRule extends AbstractRule
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function getGroups()
-    {
-        return array_merge(parent::getGroups(), ['git']);
-    }
-
-    /**
      * @param array $stableBranches
      * @param int $threshold
+     * @param bool $remoteBranches
      *
      * @throws ExpectationFailedException
      */
-    private function expectsNoMergedBranches(array $stableBranches, $threshold)
+    private function expectsNoMergedBranches(array $stableBranches, $threshold, $remoteBranches = true)
     {
-        if ($mergedBranches = $this->listMergedOrNotMergedBranches($stableBranches, true)) {
+        if ($mergedBranches = $this->listMergedOrNotMergedBranches($stableBranches, true, $remoteBranches)) {
             if (count($mergedBranches) >= $threshold) {
                 $message = sprintf('there is too much remaining merged branches (%s) : %s', count($mergedBranches), $this->stringifyMergedBranches($mergedBranches));
                 throw new ExpectationFailedException($mergedBranches, $message);
@@ -128,15 +121,18 @@ class GitRule extends AbstractRule
      *
      * @param array $stableBranches
      * @param bool $merged
+     * @param bool $remoteBranches
      * @return array
      */
-    private function listMergedOrNotMergedBranches(array $stableBranches, $merged = true)
+    private function listMergedOrNotMergedBranches(array $stableBranches, $merged = true, $remoteBranches = true)
     {
         $branches = [];
         $mergedOption = ($merged) ? '--merged' : '--no-merged';
+        $refsBase = ($remoteBranches) ? 'refs/remotes/origin' : 'refs/heads';
 
         foreach ($stableBranches as $stableBranch) {
-            $result = ProcessHelper::execute(sprintf('for branch in `git branch -r %s %s | grep -v HEAD | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
+            $result = ProcessHelper::execute(sprintf('for branch in `git for-each-ref %s %s --shell --format=\'%%(refname)\' %s | tr -d \\\' | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $refsBase, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
+
             $branches[$stableBranch] = $this->explodeCommitsArrays($result);
             if ($merged) {
                 foreach ($branches[$stableBranch] as $branchHash => $mergedBranchCommit) {
@@ -262,13 +258,16 @@ class GitRule extends AbstractRule
     }
 
     /**
+     * @param bool $remoteBranches
      * @return array
      */
-    private function getStableBranches()
+    private function getStableBranches($remoteBranches = true)
     {
-        $result = ProcessHelper::execute(sprintf('git branch -r | grep -e "%s"', $this->getBranchesRegex('stable-branches-regex')), $this->baseDir);
+        $refsBase = ($remoteBranches) ? 'refs/remotes/origin' : 'refs/heads';
 
-        return array_map("trim", $result);
+        $result = ProcessHelper::execute(sprintf('git for-each-ref --shell --format=\'%%(refname)\' %s | tr -d \\\' | grep -e "%s"', $refsBase, $this->getBranchesRegex('stable-branches-regex')), $this->baseDir);
+
+        return $result;
     }
 
     /**
@@ -289,7 +288,7 @@ class GitRule extends AbstractRule
     }
 
     /**
-     * @param array $commits
+     * @param array $mergedBranches
      * @return string
      */
     private function stringifyMergedBranches(array $mergedBranches)

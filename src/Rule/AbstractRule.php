@@ -53,14 +53,6 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * @inheritdoc
-     */
-    public static function getGroups()
-    {
-        return [];
-    }
-
-    /**
      * @return string
      */
     public static function getRuleName()

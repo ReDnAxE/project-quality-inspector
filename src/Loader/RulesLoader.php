@@ -30,11 +30,12 @@ class RulesLoader
      * @param string $configFile
      * @param string $applicationType
      * @param string $baseDir
-     * @return RuleFilterIterator
+     * @param string $baseDir
+     * @return array $ruleNames
      *
      * @throws \InvalidArgumentException
      */
-    public function load($configFile, $applicationType, $baseDir)
+    public function load($configFile, $applicationType, $baseDir, array $ruleNames = [])
     {
         $configs = $this->parseFileContent($configFile);
         $existingRules = $this->getExistingRules();
@@ -56,7 +57,7 @@ class RulesLoader
             }
         }
 
-        return new RuleFilterIterator($rules, []);
+        return new RuleFilterIterator($rules, $ruleNames);
     }
 
     /**

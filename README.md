@@ -59,6 +59,11 @@ You can use ``-j`` or ``--junitFile`` to generate a JUnit file :
 $ ./bin/pqi mycustomconfig -j pqi-junit.xml
 ```
 
+You can use multiple ``-r`` or ``--rules`` to select rules to load :
+```bash
+$ ./bin/pqi mycustomconfig -r files-rule -r git-rule
+```
+
 You can also add a ``common`` section, which will be always merged to the selected section :
 ```yaml
 mycustomconfig:
@@ -118,7 +123,7 @@ mycustomconfig:
 * git-rule
 
 When we have more git branches than developers in a project, it's sometimes difficult to avoid merge conflicts. Then when it's time to build a package, it's generally too late to rebase, merge or clean each branch individually.
-In order to prevent any risk of unnecessary conflicts, this rule helps you to detects :
+In order to prevent any risk of unnecessary conflicts, this rule helps you to detect :
 - large number of already merged branches (and suggests you to delete thoses branches)
 - branches that should be updated because there is too much new commits in stable branch
 - branches that should be updated because there is too days of work in stable branch
