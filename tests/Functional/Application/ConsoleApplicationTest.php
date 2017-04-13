@@ -25,6 +25,16 @@ class ConsoleApplicationTest extends TestCase
      */
     protected $applicationTester;
 
+    public static function setUpBeforeClass()
+    {
+        @rename(__DIR__ . '/../../Fixtures/FakeProject/git', __DIR__ . '/../../Fixtures/FakeProject/.git');
+    }
+
+    public static function setUpAfterClass()
+    {
+        @rename(__DIR__ . '/../../Fixtures/FakeProject/.git', __DIR__ . '/../../Fixtures/FakeProject/git');
+    }
+
     protected function setUp()
     {
         $consoleApplication = new ConsoleApplication();
@@ -36,7 +46,7 @@ class ConsoleApplicationTest extends TestCase
     public function testFileRule()
     {
         $this->applicationTester->run([
-            'applicationType' => 'symfony', 
+            'applicationType' => 'symfony',
             '--rules' => ['files-rule'],
             '--baseDir' => 'tests/Fixtures/FakeProject',
             '--configFile' => 'tests/Fixtures/FakeProject/pqi.yml'
@@ -59,7 +69,7 @@ class ConsoleApplicationTest extends TestCase
     public function testComposerRule()
     {
         $this->applicationTester->run([
-            'applicationType' => 'symfony', 
+            'applicationType' => 'symfony',
             '--rules' => ['composer-config-rule'],
             '--baseDir' => 'tests/Fixtures/FakeProject',
             '--configFile' => 'tests/Fixtures/FakeProject/pqi.yml'
@@ -80,16 +90,16 @@ class ConsoleApplicationTest extends TestCase
     public function testGitRule()
     {
         $this->applicationTester->run([
-            'applicationType' => 'symfony', 
+            'applicationType' => 'symfony',
             '--rules' => ['git-rule'],
             '--baseDir' => 'tests/Fixtures/FakeProject',
             '--configFile' => 'tests/Fixtures/FakeProject/pqi.yml'
         ], []);
         $display = $this->applicationTester->getDisplay();
         $results = explode(PHP_EOL, $display);
-        
+
         print_r($results);
 
-        $this->assertEquals(1, $this->applicationTester->getStatusCode());
+        $this->assertEquals(0, $this->applicationTester->getStatusCode());
     }
 }

@@ -1,0 +1,53 @@
+{
+  "name": "rednaxe/project-quality-inspector",
+  "description": "Project Quality Inspector provides a pqi command which checks Projects good practices thanks to customisable rules",
+  "type": "library",
+  "keywords": [
+    "quality",
+    "framework",
+    "testing",
+    "symfony",
+    "angular",
+    "git",
+    "php",
+    "javascript",
+    "ci"
+  ],
+  "homepage": "https://github.com/rednaxe/project-quality-inspector",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Alexandre GESLIN",
+      "email": "alexandre@gesl.in",
+      "role": "lead"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/rednaxe/project-quality-inspector/issues"
+  },
+  "require": {
+    "php": "^5.6 || ^7.0",
+    "ext-dom": "*",
+    "symfony/console": "~2.7 || ~3.0",
+    "symfony/yaml": "~2.7 || ~3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.5"
+  },
+  "suggest": {
+    "ext-xdebug": "*"
+  },
+  "bin": [
+    "pqi"
+  ],
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/"
+    ]
+  }
+}

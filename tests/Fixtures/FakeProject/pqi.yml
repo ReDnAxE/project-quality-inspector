@@ -1,0 +1,37 @@
+symfony:
+    files-rule:
+        config:
+            - "!web/app_*.php"
+            - { value: "web/app.php", grep: [ "getenv", "APP_ENV", "!$_ENV" ], reason: "This file is required and must use getenv php function to retrieve SYMFONY_ENV environment variable" }
+            - { value: "phpunit.xml", reason: "This file is required for testing code" }
+            - "composer.json"
+            - { value: "docker-compose-*.yml", grep: "version: '3'" }
+            - { value: "README.md", grep: "!Standard Edition", reason: "You should personalize the README.md file" }
+            - "tests/"
+    composer-config-rule:
+        config:
+            file: "composer.json"
+            disallow-wildcard-versioning: true
+            packages:
+                - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
+                - "symfony/phpunit-bridge"
+                - "bruli/php-git-hooks"
+    git-rule:
+        config:
+            remote-branches: false
+            stable-branches-regex:
+                - "refs/heads/\\d\\+.\\d\\+.\\d\\+"
+                - "refs/heads/master" #example: refs/heads/master, or refs/remotes/origin/master
+            ignored-branches-regex: ~
+            threshold-days-behind: "20" #in days
+            threshold-commits-behind: "50"
+            threshold-too-many-merged-branches: 5
+angularjs:
+    files-rule:
+        config:
+            - "package.json"
+            - ".eslintrc"
+common:
+    files-rule:
+        config:
+            - ".gitignore"
