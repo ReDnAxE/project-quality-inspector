@@ -29,7 +29,7 @@ if (!ini_get('date.timezone')) {
 
 foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
     if (file_exists($file)) {
-        define('CPD_COMPOSER_INSTALL', $file);
+        define('PQI_COMPOSER_INSTALL', $file);
 
         break;
     }
@@ -37,7 +37,7 @@ foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.p
 
 unset($file);
 
-if (!defined('CPD_COMPOSER_INSTALL')) {
+if (!defined('PQI_COMPOSER_INSTALL')) {
     fwrite(
         STDERR,
         'You need to set up the project dependencies using Composer:' . PHP_EOL . PHP_EOL .
@@ -48,6 +48,6 @@ if (!defined('CPD_COMPOSER_INSTALL')) {
     die(1);
 }
 
-require CPD_COMPOSER_INSTALL;
+require PQI_COMPOSER_INSTALL;
 
 ProjectQualityInspector\Application\ConsoleApplication::main();

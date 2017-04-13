@@ -25,14 +25,17 @@ class ConsoleApplicationTest extends TestCase
      */
     protected $applicationTester;
 
+    protected $isSymfony2 = null;
+
     public static function setUpBeforeClass()
     {
-        @rename(__DIR__ . '/../../Fixtures/FakeProject/git', __DIR__ . '/../../Fixtures/FakeProject/.git');
+        ProcessHelper::execute('rm -rf .git', __DIR__ . '/../../Fixtures/FakeProject');
+        ProcessHelper::execute('cp -rp git .git', __DIR__ . '/../../Fixtures/FakeProject');
     }
 
-    public static function setUpAfterClass()
+    public static function tearDownAfterClass()
     {
-        @rename(__DIR__ . '/../../Fixtures/FakeProject/.git', __DIR__ . '/../../Fixtures/FakeProject/git');
+        ProcessHelper::execute('rm -rf .git', __DIR__ . '/../../Fixtures/FakeProject');
     }
 
     protected function setUp()
@@ -41,39 +44,61 @@ class ConsoleApplicationTest extends TestCase
         $this->application = $consoleApplication->getApplication();
         $this->application->setAutoExit(false);
         $this->applicationTester = new ApplicationTester($this->application);
+
+        if ($this->isSymfony2 === null) {
+            $this->isSymfony2 = $this->isSymfonyConsole2();
+        }
     }
 
     public function testFileRule()
     {
-        $this->applicationTester->run([
+        $input = [];
+
+        if ($this->isSymfony2) {
+            $input = ['command' => 'run'];
+        }
+
+        $input = $input + [
             'applicationType' => 'symfony',
             '--rules' => ['files-rule'],
             '--baseDir' => 'tests/Fixtures/FakeProject',
             '--configFile' => 'tests/Fixtures/FakeProject/pqi.yml'
-        ], []);
+        ];
+
+
+        $this->applicationTester->run($input);
         $display = $this->applicationTester->getDisplay();
         $results = explode(PHP_EOL, $display);
 
         $this->assertEquals(1, $this->applicationTester->getStatusCode());
-        $this->assertEquals(8, count($results));
+        $this->assertEquals(9, count($results));
         $this->assertStringStartsWith(sprintf('Starting Project Quality Inspector v%s', $this->application->getVersion()), $results[0]);
         $this->assertEquals('files-rule: KO', $results[1]);
         $this->assertStringEndsWith('web/app_*.php" should not exists.', $results[2]);
         $this->assertStringEndsWith('phpunit.xml" should exists. Reason: This file is required for testing code', $results[3]);
         $this->assertStringEndsWith('docker-compose-prod.yml" should contains "version: \'3\'" string.', $results[4]);
         $this->assertStringEndsWith('README.md" should not contains "Standard Edition" string. Reason: You should personalize the README.md file', $results[5]);
-        $this->assertStringEndsWith('.gitignore" should exists.', $results[6]);
-        $this->assertEmpty($results[7]);
+        $this->assertStringEndsWith('tests/" should contains "test" string.', $results[6]);
+        $this->assertStringEndsWith('.gitignore" should exists.', $results[7]);
+        $this->assertEmpty($results[8]);
     }
 
     public function testComposerRule()
     {
-        $this->applicationTester->run([
+        $input = [];
+
+        if ($this->isSymfony2) {
+            $input = ['command' => 'run'];
+        }
+
+        $input = $input + [
             'applicationType' => 'symfony',
             '--rules' => ['composer-config-rule'],
             '--baseDir' => 'tests/Fixtures/FakeProject',
             '--configFile' => 'tests/Fixtures/FakeProject/pqi.yml'
-        ], []);
+        ];
+
+        $this->applicationTester->run($input);
         $display = $this->applicationTester->getDisplay();
         $results = explode(PHP_EOL, $display);
 
@@ -89,17 +114,30 @@ class ConsoleApplicationTest extends TestCase
 
     public function testGitRule()
     {
-        $this->applicationTester->run([
+        $input = [];
+
+        if ($this->isSymfony2) {
+            $input = ['command' => 'run'];
+        }
+
+        $input = $input + [
             'applicationType' => 'symfony',
             '--rules' => ['git-rule'],
             '--baseDir' => 'tests/Fixtures/FakeProject',
             '--configFile' => 'tests/Fixtures/FakeProject/pqi.yml'
-        ], []);
+        ];
+
+        $this->applicationTester->run($input);
         $display = $this->applicationTester->getDisplay();
         $results = explode(PHP_EOL, $display);
 
-        print_r($results);
-
         $this->assertEquals(0, $this->applicationTester->getStatusCode());
+    }
+
+    protected function isSymfonyConsole2()
+    {
+        $result = ProcessHelper::execute('./pqi run', __DIR__ . '/../../../', true);
+
+        return (strpos($result[0], 'Error: application type "run" does not exists in config file') === false) ? true : false;
     }
 }

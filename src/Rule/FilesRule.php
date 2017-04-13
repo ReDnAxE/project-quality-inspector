@@ -63,7 +63,7 @@ class FilesRule extends AbstractRule
 
         $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
 
-        if ((isset($fileConf['value']) && $fileConf['value'][0] == '!') || $fileConf[0] == '!') {
+        if ($fileName[0] == '!') {
             $fileName = ltrim($fileName, '!');
             $filePath = $baseDir . DIRECTORY_SEPARATOR . $fileName;
             $this->globShouldNotFind($filePath, $reason);
@@ -134,6 +134,7 @@ class FilesRule extends AbstractRule
     {
         $message = sprintf('file <fg=green>"%s"</> should contains <fg=green>"%s"</> string', $filePath, $grep);
         $negation = false;
+        $recursiveOption = '';
 
         if ($grep[0] == '!') {
             $grep = ltrim($grep, '!');
@@ -141,7 +142,11 @@ class FilesRule extends AbstractRule
             $message = sprintf('file <fg=green>"%s"</> should not contains <fg=green>"%s"</> string', $filePath, $grep);
         }
 
-        $result = ProcessHelper::execute(sprintf('grep %s %s', escapeshellarg($grep), $filePath), $this->baseDir, true);
+        if (is_dir($filePath)) {
+            $recursiveOption = '-r';
+        }
+
+        $result = ProcessHelper::execute(sprintf('grep %s %s %s', $recursiveOption, escapeshellarg($grep), $filePath), $this->baseDir, true);
 
         if (($negation && count($result)) || (!$negation && !count($result))) {
             throw new ExpectationFailedException($filePath, $message, $reason);

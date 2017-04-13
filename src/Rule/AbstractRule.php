@@ -111,10 +111,10 @@ abstract class AbstractRule implements RuleInterface
 
     /**
      * @param string  $name
-     * @param array  $failure
+     * @param array  $failures
      * @param integer $assertions
      * @param integer $time
-     * @param array  $error
+     * @param array  $errors
      */
     protected function addAssertion($name, array $failures = [], $assertions = 1, $time = 0, array $errors = [])
     {
@@ -128,7 +128,7 @@ abstract class AbstractRule implements RuleInterface
             ],
             'errors' => [
                 'sum' => count($errors),
-                'list' => ((count($error)) ? [['message' => $errors[0]['message'], 'type' => $errors[0]['type']]] : []) //TODO all errors
+                'list' => ((count($errors)) ? [['message' => $errors[0]['message'], 'type' => $errors[0]['type']]] : []) //TODO all errors
             ],
         ];
     }

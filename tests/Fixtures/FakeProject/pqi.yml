@@ -7,7 +7,7 @@ symfony:
             - "composer.json"
             - { value: "docker-compose-*.yml", grep: "version: '3'" }
             - { value: "README.md", grep: "!Standard Edition", reason: "You should personalize the README.md file" }
-            - "tests/"
+            - { value: "tests/", grep: "test" }
     composer-config-rule:
         config:
             file: "composer.json"

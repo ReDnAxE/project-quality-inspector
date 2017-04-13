@@ -21,15 +21,15 @@ symfony:
                 - "symfony/phpunit-bridge"
                 - "bruli/php-git-hooks"
     git-rule:
-        config:
-            remote-branches: true
-            stable-branches-regex:
-                - "origin/\\d\\+.\\d\\+.\\d\\+"
-                - "origin/master"
-            ignored-branches-regex: ~
-            threshold-days-behind: "20" #in days
-            threshold-commits-behind: "50"
-            threshold-too-many-merged-branches: 5
+            config:
+                remote-branches: true #if true, specify branches like refs/remotes/origin/master, otherwise refs/heads/master
+                stable-branches-regex:
+                    - "refs/remotes/origin/\\d\\+.\\d\\+.\\d\\+"
+                    - "refs/remotes/origin/master" #example: refs/heads/master, or refs/remotes/origin/master
+                ignored-branches-regex: ~ #TODO check if it works
+                threshold-days-behind: "20" #in days
+                threshold-commits-behind: "50"
+                threshold-too-many-merged-branches: 5
 angularjs:
     files-rule:
         config:
