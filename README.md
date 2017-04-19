@@ -28,7 +28,7 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.3.0
+composer require --dev rednaxe/project-quality-inspector ^1.4.0
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
@@ -102,7 +102,7 @@ mycustomconfig:
             - "phpmd.xml"
             - "php-git-hooks.yml"
             - { value: "README.md", grep: "!Symfony Standard Edition" }
-            - "tests/"
+            - { value: "tests/", grep: "group" }
 ```
 
 * composer-config-rule config example:
@@ -117,7 +117,7 @@ mycustomconfig:
                 - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
                 - "phpunit-bridge"
                 - "bruli/php-git-hooks"
-                - "php-cs-fixer"
+                - { value: "symfony/swiftmailer-bundle", semver: "^2.5.0" }
 ```
 
 * git-rule
@@ -150,8 +150,6 @@ TODO
 * Tests
 * composer-config-rule: disallow-wildcard-versioning > add current installed version in error message to facilitate explicit versioning correction
 * composer-config-rule: check if there is a lot of updates to do, and if there is outdated packages installed
-* git-rule : complete merged branches with date of merge and from who
-* file-rule : allow to grep into a folder
 * add time in jUnit generated file content
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule

@@ -11,6 +11,7 @@
 namespace ProjectQualityInspector\Rule;
 
 use ProjectQualityInspector\Exception\ExpectationFailedException;
+use Composer\Semver\Semver;
 
 /**
  * Class ComposerConfigRule
@@ -30,21 +31,18 @@ class ComposerConfigRule extends AbstractRule
     public function evaluate()
     {
         $expectationsFailedExceptions = [];
-        $composerConfig = $this->getComposerConfig();
-        $requirements = $composerConfig['require'];
-
-        if ($composerConfig['require-dev']) {
-            $requirements = array_merge($composerConfig['require'], $composerConfig['require-dev']);
-        }
+        $requirements = $this->getComposerRequirements();
 
         foreach ($this->config['packages'] as $package) {
             try {
                 $this->expectsPackagePresence($package, $requirements);
-                $this->addAssertion($this->getValue($package));
-
+                if (isset($package['semver'])) {
+                    $this->expectsPackageSemver($package, $package['semver']);
+                }
+                $this->addAssertion($this->getValue($package), [], 2);
             } catch (ExpectationFailedException $e) {
                 $expectationsFailedExceptions[] = $e;
-                $this->addAssertion($this->getValue($package), [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsPackagePresence']]);
+                $this->addAssertion($this->getValue($package), [['message' => $e->getMessage() . $e->getReason(), 'type' => 'expectsPackagePresence|expectsPackageSemver']]);
             }
         }
 
@@ -96,9 +94,34 @@ class ComposerConfigRule extends AbstractRule
     }
 
     /**
-     * @param $package
-     * @param $requirements
-     * @param $reason
+     * @param array|string $raw
+     * @param string $semver
+     *
+     * @throws ExpectationFailedException
+     */
+    protected function expectsPackageSemver($raw, $semver)
+    {
+        $package = $this->getValue($raw);
+        $reason = $this->getReason($raw);
+
+        $composerLock = $this->getComposerLock();
+
+        if ($composerLock && $key = array_search($package, array_column($composerLock['packages'], 'name'))) {
+            $cprInstalledVersion = $composerLock['packages'][$key]['version'];
+            $message = sprintf('Installed package <fg=green>"%s</> <fg=green>%s"</> should satisfies this expected semver <fg=green>"%s"</>', $package, $cprInstalledVersion, $semver);
+
+            if (!Semver::satisfies($this->sanitizeVersion($cprInstalledVersion), $semver)) {
+                throw new ExpectationFailedException($package, $message, $reason);
+            };
+        }
+    }
+
+    /**
+     * @param string $package
+     * @param array $requirements
+     * @param string $reason
+     *
+     * @throws ExpectationFailedException
      */
     protected function packageShouldExists($package, $requirements, $reason)
     {
@@ -110,9 +133,11 @@ class ComposerConfigRule extends AbstractRule
     }
 
     /**
-     * @param $package
-     * @param $requirements
-     * @param $reason
+     * @param string $package
+     * @param array $requirements
+     * @param string $reason
+     *
+     * @throws ExpectationFailedException
      */
     protected function packageShouldNotExists($package, $requirements, $reason)
     {
@@ -121,6 +146,21 @@ class ComposerConfigRule extends AbstractRule
         if (key_exists($package, $requirements)) {
             throw new ExpectationFailedException($package, $message, $reason);
         }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getComposerRequirements()
+    {
+        $composerConfig = $this->getComposerConfig();
+        $requirements = $composerConfig['require'];
+
+        if ($composerConfig['require-dev']) {
+            $requirements = array_merge($composerConfig['require'], $composerConfig['require-dev']);
+        }
+
+        return $requirements;
     }
 
     /**
@@ -136,5 +176,25 @@ class ComposerConfigRule extends AbstractRule
         }
 
         return json_decode(file_get_contents($configFile), true);
+    }
+
+    /**
+     * @return array|null
+     */
+    protected function getComposerLock()
+    {
+        $composerLock = $this->baseDir . DIRECTORY_SEPARATOR . str_replace('.json', '.lock', $this->config['file']);
+
+        return (file_exists($composerLock)) ? json_decode(file_get_contents($composerLock), true) : null;
+    }
+
+    /**
+     * @param string $version
+     *
+     * @return mixed
+     */
+    protected function sanitizeVersion($version)
+    {
+        return str_replace('v', '', $version);
     }
 }

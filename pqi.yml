@@ -11,7 +11,7 @@ symfony:
             - "phpmd.xml"
             - "php-git-hooks.yml"
             - { value: "README.md", grep: "!Symfony Standard Edition" }
-            - "tests/"
+            - { value: "tests/", grep: "group" }
     composer-config-rule:
         config:
             file: "composer.json"
@@ -20,6 +20,7 @@ symfony:
                 - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
                 - "symfony/phpunit-bridge"
                 - "bruli/php-git-hooks"
+                - { value: "symfony/swiftmailer-bundle", semver: "^2.5.0" }
     git-rule:
             config:
                 remote-branches: true #if true, specify branches like refs/remotes/origin/master, otherwise refs/heads/master

@@ -41,7 +41,7 @@ class ConsoleApplication
      */
     public function getApplication()
     {
-        $application = new Application('pqi', '1.3.0');
+        $application = new Application('pqi', '1.4.0');
         $command = new MainCommand();
         $application->add($command);
         $application->setDefaultCommand($command->getName(), true);

@@ -16,6 +16,7 @@ symfony:
                 - { value: "!h4cc/alice-fixtures-bundle", reason: "This package is no more maintained" }
                 - "symfony/phpunit-bridge"
                 - "bruli/php-git-hooks"
+                - { value: "symfony/console", semver: "^1.1.1" }
     git-rule:
         config:
             remote-branches: false

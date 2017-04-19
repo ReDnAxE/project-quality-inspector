@@ -103,13 +103,14 @@ class ConsoleApplicationTest extends TestCase
         $results = explode(PHP_EOL, $display);
 
         $this->assertEquals(1, $this->applicationTester->getStatusCode());
-        $this->assertEquals(6, count($results));
+        $this->assertEquals(7, count($results));
         $this->assertStringStartsWith(sprintf('Starting Project Quality Inspector v%s', $this->application->getVersion()), $results[0]);
         $this->assertEquals('composer-config-rule: KO', $results[1]);
         $this->assertStringEndsWith('Package "symfony/phpunit-bridge" should be installed.', $results[2]);
         $this->assertStringEndsWith('Package "bruli/php-git-hooks" should be installed.', $results[3]);
-        $this->assertStringEndsWith('Requirement "ext-dom" should contains at least major explicit version. Version "*" is not authorized.', $results[4]);
-        $this->assertEmpty($results[5]);
+        $this->assertStringEndsWith('Installed package "symfony/console v3.2.6" should satisfies this expected semver "^1.1.1".', $results[4]);
+        $this->assertStringEndsWith('Requirement "ext-dom" should contains at least major explicit version. Version "*" is not authorized.', $results[5]);
+        $this->assertEmpty($results[6]);
     }
 
     public function testGitRule()
@@ -132,6 +133,8 @@ class ConsoleApplicationTest extends TestCase
         $results = explode(PHP_EOL, $display);
 
         $this->assertEquals(0, $this->applicationTester->getStatusCode());
+
+        $this->markTestIncomplete();
     }
 
     protected function isSymfonyConsole2()
