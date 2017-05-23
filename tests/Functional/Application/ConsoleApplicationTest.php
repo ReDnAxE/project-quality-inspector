@@ -76,9 +76,9 @@ class ConsoleApplicationTest extends TestCase
         $this->assertEquals('files-rule: KO', $results[1]);
         $this->assertStringEndsWith('web/app_*.php" should not exists.', $results[2]);
         $this->assertStringEndsWith('phpunit.xml" should exists. Reason: This file is required for testing code', $results[3]);
-        $this->assertStringEndsWith('docker-compose-prod.yml" should contains "version: \'3\'" string.', $results[4]);
-        $this->assertStringEndsWith('README.md" should not contains "Standard Edition" string. Reason: You should personalize the README.md file', $results[5]);
-        $this->assertStringEndsWith('tests/" should contains "test" string.', $results[6]);
+        $this->assertStringEndsWith('docker-compose-prod.yml" should contain "version: \'3\'" string.', $results[4]);
+        $this->assertStringEndsWith('README.md" should not contain "Standard Edition" string. Reason: You should personalize the README.md file', $results[5]);
+        $this->assertStringEndsWith('tests/" should contain "test" string.', $results[6]);
         $this->assertStringEndsWith('.gitignore" should exists.', $results[7]);
         $this->assertEmpty($results[8]);
     }

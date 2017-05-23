@@ -28,10 +28,12 @@ You can install the component in 2 different ways:
 
 Simply add a (development-time) dependency on ``rednaxe/project-quality-inspector`` to your project's ``composer.json`` file if you use [Composer](https://getcomposer.org/) to manage the dependencies of your project:
 ```bash
-composer require --dev rednaxe/project-quality-inspector ^1.4.0
+composer require --dev rednaxe/project-quality-inspector ^1.5.0
 ```
 
 * Use the official Git repository (https://github.com/rednaxe/project-quality-inspector).
+
+You will need a recent git version (at least >=2.7.0) to use git rule.
 
 Usage
 -----
@@ -128,6 +130,8 @@ In order to prevent any risk of unnecessary conflicts, this rule helps you to de
 - branches that should be updated because there is too much new commits in stable branch
 - branches that should be updated because there is too days of work in stable branch
 
+You will need a recent git version (at least >=2.7.0) to use git rule.
+
 config example:
 
 ```yaml
@@ -150,6 +154,7 @@ TODO
 * Tests
 * composer-config-rule: disallow-wildcard-versioning > add current installed version in error message to facilitate explicit versioning correction
 * composer-config-rule: check if there is a lot of updates to do, and if there is outdated packages installed
+* curl-rule : create a curl rule which will be able to make requests and checks responses, headers, etc...
 * add time in jUnit generated file content
 * Add notice / alert level concept for expectations in each rule config
 * Add link to CONTRIBUTING.md file which explain how to easily develop new rule

@@ -131,7 +131,7 @@ class GitRule extends AbstractRule
         $refsBase = ($remoteBranches) ? 'refs/remotes/origin' : 'refs/heads';
 
         foreach ($stableBranches as $stableBranch) {
-            $result = ProcessHelper::execute(sprintf('for branch in `git for-each-ref %s %s --shell --format=\'%%(refname)\' %s | tr -d \\\' | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $refsBase, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
+            $result = ProcessHelper::execute(sprintf('for branch in `git for-each-ref %s %s --shell --format=\'%%(refname)\' %s | tr -d \\\' | grep -ve "/HEAD" | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $refsBase, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
 
             $branches[$stableBranch] = $this->explodeCommitsArrays($result);
             if ($merged) {

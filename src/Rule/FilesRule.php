@@ -132,14 +132,14 @@ class FilesRule extends AbstractRule
      */
     private function fileShouldGrep($filePath, $grep, $reason)
     {
-        $message = sprintf('file <fg=green>"%s"</> should contains <fg=green>"%s"</> string', $filePath, $grep);
+        $message = sprintf('file <fg=green>"%s"</> should contain <fg=green>"%s"</> string', $filePath, $grep);
         $negation = false;
         $recursiveOption = '';
 
         if ($grep[0] == '!') {
             $grep = ltrim($grep, '!');
             $negation = true;
-            $message = sprintf('file <fg=green>"%s"</> should not contains <fg=green>"%s"</> string', $filePath, $grep);
+            $message = sprintf('file <fg=green>"%s"</> should not contain <fg=green>"%s"</> string', $filePath, $grep);
         }
 
         if (is_dir($filePath)) {

@@ -23,7 +23,7 @@ class RuleFilterIterator extends \FilterIterator
     private $ruleNames;
 
     /**
-     * @param Iterator $iterator
+     * @param \Iterator $iterator
      * @param array   $ruleNames
      */
     public function __construct(\Iterator $iterator , array $ruleNames = [])
@@ -38,10 +38,7 @@ class RuleFilterIterator extends \FilterIterator
             $current = $this->getInnerIterator()->current();
             return in_array($current::getRuleName(), $this->ruleNames);
         }
-        /*$user = $this->getInnerIterator()->current();
-        if( strcasecmp($user['name'],$this->groups) == 0) {
-            return false;
-        }*/
+
         return true;
     }
 }
