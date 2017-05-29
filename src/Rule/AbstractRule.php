@@ -121,6 +121,8 @@ abstract class AbstractRule implements RuleInterface
         $this->assertions[] = [
             'name' => $name,
             'assertions' => $assertions,
+            'classname' => '',
+            'status' => '',
             'time' => $time,
             'failures' => [
                 'sum' => count($failures),

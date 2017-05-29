@@ -23,10 +23,6 @@ class JunitHelper
     {
         $xml = new \DOMDocument('1.0', 'utf-8');
         $testSuites = $xml->createElement("testsuites");
-        //TODO: attribute errors
-        //TODO: attribute failures
-        //TODO: attribute name
-        //TODO: attribute time
 
         foreach ($rules as $rule) {
             $testSuites->appendChild(static::createTestSuite($rule::getRuleName(), $rule->getAssertions(), $xml));
