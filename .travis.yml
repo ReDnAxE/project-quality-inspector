@@ -20,10 +20,6 @@ matrix:
       env: DEPENDENCIES=low
     - php: 7.1
       env: DEPENDENCIES=high
-    - php: hhvm
-      env: DEPENDENCIES=high
-  allow_failures:
-    - php: hhvm
 
 before_install:
   - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi

@@ -70,7 +70,7 @@ class ConsoleApplicationTest extends TestCase
         $display = $this->applicationTester->getDisplay();
         $results = explode(PHP_EOL, $display);
 
-        $this->assertEquals(1, $this->applicationTester->getStatusCode());
+        $this->assertEquals(0, $this->applicationTester->getStatusCode());
         $this->assertEquals(9, count($results));
         $this->assertStringStartsWith(sprintf('Starting Project Quality Inspector v%s', $this->application->getVersion()), $results[0]);
         $this->assertEquals('files-rule: KO', $results[1]);
@@ -102,7 +102,7 @@ class ConsoleApplicationTest extends TestCase
         $display = $this->applicationTester->getDisplay();
         $results = explode(PHP_EOL, $display);
 
-        $this->assertEquals(1, $this->applicationTester->getStatusCode());
+        $this->assertEquals(0, $this->applicationTester->getStatusCode());
         $this->assertEquals(7, count($results));
         $this->assertStringStartsWith(sprintf('Starting Project Quality Inspector v%s', $this->application->getVersion()), $results[0]);
         $this->assertEquals('composer-config-rule: KO', $results[1]);
