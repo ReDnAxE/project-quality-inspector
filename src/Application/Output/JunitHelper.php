@@ -46,7 +46,7 @@ class JunitHelper
     private static function createTestSuite($name, array $tests, \DOMDocument $xml)
     {
         $testSuite = static::createElement('testsuite', [
-            'name' => $name,
+            'name' => sprintf('pqi.%s', $name),
             'tests' => count($tests),
             'failures' => static::sumArraysKey('failures', $tests, 'sum'),
             'errors' => static::sumArraysKey('errors', $tests, 'sum'),
