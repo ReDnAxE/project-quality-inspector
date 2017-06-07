@@ -12,6 +12,7 @@ namespace ProjectQualityInspector\Command;
 
 use ProjectQualityInspector\Application\Output\UIHelper;
 use ProjectQualityInspector\Application\Output\JunitHelper;
+use ProjectQualityInspector\Application\Output\HtmlReportHelper;
 use ProjectQualityInspector\Exception\RuleViolationException;
 use ProjectQualityInspector\Loader\RulesLoader;
 use Symfony\Component\Console\Command\Command;
@@ -36,7 +37,8 @@ class MainCommand extends Command
             ->addOption('rules', '-r', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_REQUIRED, 'select rules to load')
             ->addOption('baseDir', '-b', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
             ->addOption('configFile', '-c', InputOption::VALUE_REQUIRED, 'Change the base directory of application')
-            ->addOption('junitFile', '-j', InputOption::VALUE_REQUIRED, 'Generate a JUnit file');
+            ->addOption('junitFile', '-j', InputOption::VALUE_REQUIRED, 'Generate a JUnit file')
+            ->addOption('htmlFile', '-f', InputOption::VALUE_REQUIRED, 'Generate a HTML file');
     }
 
     /**
@@ -55,6 +57,7 @@ class MainCommand extends Command
         $configFile = $input->getOption('configFile') ? getcwd() . '/' . $input->getOption('configFile') : $this->findConfigFile();
         //TODO: check if absolute baseDir
         $junitFile = $input->getOption('junitFile') ? getcwd() . '/' . $input->getOption('junitFile') : null;
+        $htmlFile = $input->getOption('htmlFile') ? getcwd() . '/' . $input->getOption('htmlFile') : null;
 
         $rulesLoader = new RulesLoader();
 
@@ -81,6 +84,10 @@ class MainCommand extends Command
 
         if ($junitFile) {
             JunitHelper::generateJunitFile($rules, $junitFile);
+        }
+
+        if ($htmlFile) {
+            HtmlReportHelper::generateHtmlFile($rules, $htmlFile);
         }
 
         return $exitCode;
