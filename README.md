@@ -4,9 +4,13 @@ Project Quality Inspector
 ProjectQualityInspector is a PHP script `pqi` which checks project custom good practices.
 This generic quality checking tool will check your projects through various configurable rules.
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/rednaxe/project-quality-inspector.svg?style=flat-square)](https://packagist.org/packages/rednaxe/project-quality-inspector)
+[![Latest Stable Version](https://poser.pugx.org/ReDnAxE/project-quality-inspector/v/stable.svg)](https://packagist.org/packages/ReDnAxE/project-quality-inspector)
+[![Latest Unstable Version](https://poser.pugx.org/ReDnAxE/project-quality-inspector/v/unstable.svg)](https://packagist.org/packages/ReDnAxE/project-quality-inspector)
+[![Total Downloads](https://poser.pugx.org/ReDnAxE/project-quality-inspector/downloads)](https://packagist.org/packages/ReDnAxE/project-quality-inspector)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://php.net/)
 [![Build Status](https://img.shields.io/travis/ReDnAxE/project-quality-inspector/master.svg?style=flat-square)](https://travis-ci.org/ReDnAxE/project-quality-inspector)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ReDnAxE/project-quality-inspector/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ReDnAxE/project-quality-inspector/?branch=master)
+[![License](https://poser.pugx.org/ReDnAxE/project-quality-inspector/license.svg)](https://packagist.org/packages/ReDnAxE/project-quality-inspector)
 
 This tool is for you if you want to check in your project if :
 * a file or directory (or a pathname pattern) should exist, or should not exist
