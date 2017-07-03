@@ -15,7 +15,7 @@
     "ci"
   ],
   "homepage": "https://github.com/rednaxe/project-quality-inspector",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "authors": [
     {
       "name": "Alexandre GESLIN",
@@ -31,7 +31,8 @@
     "ext-dom": "*",
     "symfony/console": "~2.7 || ~3.0",
     "symfony/yaml": "~2.7 || ~3.0",
-    "composer/semver": "^1.4.2"
+    "composer/semver": "^1.4.2",
+    "guzzlehttp/guzzle": "^6.3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.5"

@@ -22,20 +22,21 @@ symfony:
                 - "bruli/php-git-hooks"
                 - { value: "symfony/swiftmailer-bundle", semver: "^2.5.0" }
     git-rule:
-            config:
-                remote-branches: true #if true, specify branches like refs/remotes/origin/master, otherwise refs/heads/master
-                stable-branches-regex:
-                    - "refs/remotes/origin/\\d\\+.\\d\\+.\\d\\+"
-                    - "refs/remotes/origin/master" #example: refs/heads/master, or refs/remotes/origin/master
-                ignored-branches-regex: ~ #TODO check if it works
-                threshold-days-behind: "20" #in days
-                threshold-commits-behind: "50"
-                threshold-too-many-merged-branches: 5
-angularjs:
-    files-rule:
         config:
-            - "package.json"
-            - ".eslintrc"
+            remote-branches: true #if true, specify branches like refs/remotes/origin/master, otherwise refs/heads/master
+            stable-branches-regex:
+                - "refs/remotes/origin/\\d\\+.\\d\\+.\\d\\+"
+                - "refs/remotes/origin/master" #example: refs/heads/master, or refs/remotes/origin/master
+            ignored-branches-regex: ~ #TODO check if it works
+            threshold-days-behind: "20" #in days
+            threshold-commits-behind: "50"
+            threshold-too-many-merged-branches: 5
+    curl-rule:
+        config:
+              base-url: "http://localhost:11000/"
+              queries:
+                - request: { url: "http://localhost:11000/", method: "GET", headers: {'test':'testvalue'} }
+                  expectedResponse: { statusCode: 200, headers: {"Server":"Apache/2.4.10 (Debian)", "ETag":"482a-552d325b5e1a1"} }
 common:
     files-rule:
         config:

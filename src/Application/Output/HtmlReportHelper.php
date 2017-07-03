@@ -121,14 +121,7 @@ EOT;
      */
     private static function createTestCase(array $test)
     {
-        /*$testCase = '
-            <tr>
-                <td>'.$test['name'].', assertions: '.$test['assertions'].', classname: '.$test['classname'].', status: '.$test['status'].', time: '.$test['time'].'</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>';*/
+        $testCase = '';
 
         if ($test['failures']['sum'] > 0) {
             foreach ($test['failures']['list']  as $failure) {

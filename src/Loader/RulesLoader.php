@@ -14,6 +14,7 @@ use ProjectQualityInspector\Iterator\RuleFilterIterator;
 use ProjectQualityInspector\Rule\ComposerConfigRule;
 use ProjectQualityInspector\Rule\FilesRule;
 use ProjectQualityInspector\Rule\GitRule;
+use ProjectQualityInspector\Rule\CurlRule;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
@@ -88,6 +89,7 @@ class RulesLoader
             call_user_func(FilesRule::class . '::getRuleName') => FilesRule::class,
             call_user_func(ComposerConfigRule::class . '::getRuleName') => ComposerConfigRule::class,
             call_user_func(GitRule::class . '::getRuleName') => GitRule::class,
+            call_user_func(CurlRule::class . '::getRuleName') => CurlRule::class,
         ];
     }
 }
