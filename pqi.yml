@@ -25,8 +25,8 @@ symfony:
         config:
             remote-branches: true #if true, specify branches like refs/remotes/origin/master, otherwise refs/heads/master
             stable-branches-regex:
-                - "refs/remotes/origin/\\d\\+.\\d\\+.\\d\\+"
-                - "refs/remotes/origin/master" #example: refs/heads/master, or refs/remotes/origin/master
+                - "refs/remotes/[a-z0-9]\\+/\\d\\+.\\d\\+.\\d\\+"
+                - "refs/remotes/[a-z0-9]\\+/master" #example: refs/heads/master, or refs/remotes/origin/master
             ignored-branches-regex: ~ #TODO check if it works
             threshold-days-behind: "20" #in days
             threshold-commits-behind: "50"

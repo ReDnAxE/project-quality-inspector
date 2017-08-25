@@ -128,7 +128,7 @@ class GitRule extends AbstractRule
     {
         $branches = [];
         $mergedOption = ($merged) ? '--merged' : '--no-merged';
-        $refsBase = ($remoteBranches) ? 'refs/remotes/origin' : 'refs/heads';
+        $refsBase = ($remoteBranches) ? 'refs/remotes' : 'refs/heads';
 
         foreach ($stableBranches as $stableBranch) {
             $result = ProcessHelper::execute(sprintf('for branch in `git for-each-ref %s %s --shell --format=\'%%(refname)\' %s | tr -d \\\' | grep -ve "/HEAD" | grep -ve "%s" | grep -ve "%s"`; do echo `git show --format="%s" $branch | head -n 1`\|$branch; done | sort -r', $mergedOption, $stableBranch, $refsBase, $this->getBranchesRegex('stable-branches-regex'), $this->getBranchesRegex('ignored-branches-regex'), $this->commitFormat), $this->baseDir);
@@ -263,7 +263,7 @@ class GitRule extends AbstractRule
      */
     private function getStableBranches($remoteBranches = true)
     {
-        $refsBase = ($remoteBranches) ? 'refs/remotes/origin' : 'refs/heads';
+        $refsBase = ($remoteBranches) ? 'refs/remotes' : 'refs/heads';
 
         $result = ProcessHelper::execute(sprintf('git for-each-ref --shell --format=\'%%(refname)\' %s | tr -d \\\' | grep -e "%s"', $refsBase, $this->getBranchesRegex('stable-branches-regex')), $this->baseDir);
 
